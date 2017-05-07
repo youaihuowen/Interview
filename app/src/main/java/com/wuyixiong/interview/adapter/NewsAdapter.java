@@ -2,13 +2,11 @@ package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.wuyixiong.interview.R;
-import com.wuyixiong.interview.view.AutoScrollViewPager;
 import com.wuyixiong.interview.viewholder.NewsViewHolder;
 import com.wuyixiong.interview.viewholder.ViewPagerViewholder;
 

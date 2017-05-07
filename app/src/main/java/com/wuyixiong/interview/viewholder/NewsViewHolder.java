@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wuyixiong.interview.R;
-import com.wuyixiong.interview.view.AutoScrollViewPager;
 
 /**
  * Created by WUYIXIONG on 2017-5-7.
