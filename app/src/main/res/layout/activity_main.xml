@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+    </FrameLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_home_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/iv_home_main"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:src="@drawable/iv_home_selector"
+               />
+            <TextView
+                android:id="@+id/tv_home_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#0C85FF"
+                android:text="@string/home"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_interview_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/iv_interview_main"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:src="@drawable/iv_explore_selector"
+                />
+            <TextView
+                android:id="@+id/tv_interview_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#C8CBD4"
+                android:text="@string/interview"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_message_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/iv_message_main"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:src="@drawable/iv_message_selector"
+                />
+            <TextView
+                android:id="@+id/tv_message_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#C8CBD4"
+                android:text="@string/message"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_mine_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/iv_mine_main"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:src="@drawable/iv_mine_selector"
+                />
+            <TextView
+                android:id="@+id/tv_mine_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#C8CBD4"
+                android:text="@string/mine"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context="com.wuyixiong.interview.fragment.MineFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        android:text="我"
+        android:background="@color/titlebar"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp30"/>
+    <LinearLayout
+        android:id="@+id/ll_mine"
+        android:layout_marginBottom="@dimen/dp15"
+        android:layout_marginTop="@dimen/dp15"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp80"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <com.wuyixiong.interview.tools.CircleImageView
+            android:layout_marginLeft="@dimen/dp30"
+            android:layout_marginRight="@dimen/dp30"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:src="@drawable/ic_unlogin"/>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_nick_mime"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dp25"
+                android:text="NickName"/>
+            <TextView
+                android:id="@+id/tv_unlogin_mine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dp15"
+                android:text="未登录，请先登录或注册"/>
+            <TextView
+                android:id="@+id/tv_user_mine"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dp15"
+                android:text="UserName"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginRight="@dimen/dp15"
+            android:layout_marginLeft="@dimen/dp30"
+            android:layout_width="@dimen/dp30"
+            android:layout_height="@dimen/dp30"
+            android:src="@drawable/arrow_right"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_mine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
+    </ListView>
+
+</LinearLayout>
