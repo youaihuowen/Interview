@@ -1,0 +1,90 @@
+package com.wuyixiong.interview.utils;
+
+import android.icu.util.TimeUnit;
+import android.util.Log;
+import android.util.TimeUtils;
+
+import com.wuyixiong.interview.entity.News;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+
+/**
+ * Created by WUYIXIONG on 2017-5-9.
+ */
+
+public class Query {
+    private static Query query = null;
+
+    private Query(){
+
+    }
+    public static Query getInstance(){
+        if (query == null){
+            query = new Query();
+        }
+        return query;
+    }
+
+
+
+    /**
+     * 查询资讯(有网)
+     * @return
+     */
+    public void queryNews(ArrayList<String> list){
+        BmobQuery<News> bmobQuery = new BmobQuery<News>();
+        Boolean isCache = bmobQuery.hasCachedResult(News.class);
+//        bmobQuery.clearCachedResult(News.class);
+        if (isCache){
+            bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        }else {
+            bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        }
+        //设置缓存保留时间
+        bmobQuery.setMaxCacheAge(java.util.concurrent.TimeUnit.DAYS.toMillis(1));
+
+        bmobQuery.addWhereContainedIn("category",list);
+        bmobQuery.setLimit(15);//设置每次显示条数
+
+        bmobQuery.findObjects(new FindListener<News>() {
+            @Override
+            public void done(List<News> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post((ArrayList<News>)list);
+                }else {
+                    Log.i("tag", e.toString());
+                }
+            }
+        });
+    }
+
+    /**
+     * 查询资讯(没网)
+     * @param list
+     */
+    public void queryNewsWithouNetwork(ArrayList<String> list){
+        BmobQuery<News> bmobQuery = new BmobQuery<News>();
+        bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+        bmobQuery.addWhereContainedIn("category",list);
+        bmobQuery.setLimit(15);//设置每次显示条数
+        bmobQuery.findObjects(new FindListener<News>() {
+            @Override
+            public void done(List<News> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post((ArrayList<News>)list);
+                }else {
+                    Log.i("tag", e.toString());
+                }
+            }
+        });
+    }
+
+
+}
