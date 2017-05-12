@@ -4,11 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:background="@color/titlebar">
+        <TextView
+            android:id="@+id/tv_title_text"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:textSize="@dimen/dp23"
+            android:textColor="@color/title_text"
+            android:text="首页"/>
+        <ImageView
+            android:id="@+id/iv_title_menu"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginBottom="@dimen/dp5"
+            android:layout_marginTop="@dimen/dp5"
+            android:layout_marginRight="@dimen/dp10"
+            android:src="@drawable/ic_menu"
+            android:layout_gravity="right|center_vertical"
+            />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
-
     </FrameLayout>
 
     <LinearLayout

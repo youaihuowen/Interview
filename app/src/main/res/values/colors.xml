@@ -13,4 +13,5 @@
     <color name="pressed_text">#ABB4BF</color>
     <color name="btn_login">#3D89D6</color>
     <color name="yanzheng_bg">#FF9933</color>
+    <color name="title_text">#DCDDE0</color>
 </resources>

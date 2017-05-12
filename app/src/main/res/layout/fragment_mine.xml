@@ -7,14 +7,14 @@
     tools:context="com.wuyixiong.interview.fragment.MineFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp40"
-        android:text="我"
-        android:background="@color/titlebar"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dp30"/>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/dp40"-->
+        <!--android:text="我"-->
+        <!--android:background="@color/titlebar"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="@dimen/dp30"/>-->
     <LinearLayout
         android:id="@+id/ll_mine"
         android:layout_marginBottom="@dimen/dp15"
@@ -24,7 +24,7 @@
         android:gravity="center_vertical"
         android:background="@color/white"
         android:orientation="horizontal">
-        <com.wuyixiong.interview.tools.CircleImageView
+        <com.wuyixiong.interview.view.CircleImageView
             android:layout_marginLeft="@dimen/dp30"
             android:layout_marginRight="@dimen/dp30"
             android:layout_width="@dimen/dp60"

@@ -1,14 +1,23 @@
 package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
+import com.wuyixiong.interview.entity.News;
+import com.wuyixiong.interview.event.SendUrl;
 import com.wuyixiong.interview.viewholder.NewsViewHolder;
 import com.wuyixiong.interview.viewholder.ViewPagerViewholder;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 
 /**
  * Created by WUYIXIONG on 2017-5-7.
@@ -17,9 +26,14 @@ import com.wuyixiong.interview.viewholder.ViewPagerViewholder;
 public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
+    private ArrayList<News> data = new ArrayList<News>();
 
     public NewsAdapter(Context context) {
         mContext = context;
+    }
+
+    public void setData(ArrayList<News> data) {
+        this.data = data;
     }
 
     @Override
@@ -43,12 +57,27 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof NewsViewHolder){
+            NewsViewHolder newsViewHolder = (NewsViewHolder)holder;
+            newsViewHolder.newsTitle.setText(data.get(position-1).getTitle());
+            newsViewHolder.newsTime.setText(data.get(position-1).getUpdatedAt().substring(0,10));
+            ImageLoader.getInstance().displayImage(data.get(position-1).getPic_url(),
+                    newsViewHolder.newsImage);
+            newsViewHolder.ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SendUrl sendUrl = new SendUrl();
+                    sendUrl.setUrl(data.get(position-1).getUrl());
+                    EventBus.getDefault().post(sendUrl);
 
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return data.size()+1;
     }
 }

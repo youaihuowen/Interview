@@ -45,9 +45,11 @@ public class ViewPagerViewholder extends RecyclerView.ViewHolder implements OnBa
 //        mLoopViewPagerLayout.setIndicatorLocation(IndicatorLocation.Center);//设置小圆点位置
         mLoopViewPagerLayout.initializeData(context);//初始化数据
         ArrayList<BannerInfo> bannerInfos = new ArrayList<>();
-        bannerInfos.add(new BannerInfo<Integer>(R.drawable.ic_login_sina_weibo, "第一张图片"));
-        bannerInfos.add(new BannerInfo<Integer>(R.drawable.ic_login_tencent_qq, "第二张图片"));
-        bannerInfos.add(new BannerInfo<Integer>(R.drawable.ic_login_wechat, "第三张图片"));
+        bannerInfos.add(new BannerInfo<Integer>(R.drawable.pic_viewpager1, "第一张图片"));
+        bannerInfos.add(new BannerInfo<Integer>(R.drawable.pic_viewpager2, "第二张图片"));
+        bannerInfos.add(new BannerInfo<Integer>(R.drawable.pic_viewpager3, "第三张图片"));
+        bannerInfos.add(new BannerInfo<Integer>(R.drawable.pic_viewpager4, "第四张图片"));
+        bannerInfos.add(new BannerInfo<Integer>(R.drawable.pic_viewpager5, "第五张图片"));
         mLoopViewPagerLayout.setOnLoadImageViewListener(new OnDefaultImageViewLoader() {
             @Override
             public void onLoadImageView(ImageView imageView, Object parameter) {
@@ -61,7 +63,6 @@ public class ViewPagerViewholder extends RecyclerView.ViewHolder implements OnBa
     public void stop(){
         mLoopViewPagerLayout.stopLoop();
     }
-
 
     @Override
     public void onBannerClick(int index, ArrayList<BannerInfo> banner) {

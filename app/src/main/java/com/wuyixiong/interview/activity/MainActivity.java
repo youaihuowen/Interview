@@ -26,6 +26,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView iv_home, iv_interview, iv_message, iv_mine;
     private ImageView[] ivs = new ImageView[4];
     private FrameLayout content;
+    private TextView titleText;
+    private ImageView titleMenu;
 
     private HomeFragment homeFragment;
     private InterviewFragment interviewFragment;
@@ -34,6 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FragmentManager manager;
 
+    public static Boolean havaNetwork;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +48,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         manager = getSupportFragmentManager();
         manager.beginTransaction().add(R.id.content, homeFragment).commit();
         iv_home.setSelected(true);
+        //判断是否有网
+        havaNetwork = isNetworkAvailable(this);
         //初始化Bmob
         Bmob.initialize(this, "ce69e04181855972b059106c651b6433");
         //设置监听
         setListener();
+
     }
 
     @Override
@@ -77,6 +83,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ivs[3] = iv_mine;
 
         content = (FrameLayout) findViewById(R.id.content);
+        titleMenu = (ImageView) findViewById(R.id.iv_title_menu);
+        titleText = (TextView) findViewById(R.id.tv_title_text);
 
 
     }
@@ -87,12 +95,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ll_interview.setOnClickListener(this);
         ll_message.setOnClickListener(this);
         ll_mine.setOnClickListener(this);
+        titleMenu.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_home_main:
+                setTitle("首页",true);
                 if (homeFragment != null) {
                     manager.beginTransaction().replace(R.id.content, homeFragment).commit();
                 } else {
@@ -102,6 +112,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 selected(0);
                 break;
             case R.id.ll_interview_main:
+                setTitle("面试",false);
                 if (interviewFragment != null) {
                     manager.beginTransaction().replace(R.id.content, interviewFragment).commit();
                 } else {
@@ -111,6 +122,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 selected(1);
                 break;
             case R.id.ll_message_main:
+                setTitle("消息",false);
                 if (messageFragment != null) {
                     manager.beginTransaction().replace(R.id.content, messageFragment).commit();
                 } else {
@@ -120,6 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 selected(2);
                 break;
             case R.id.ll_mine_main:
+                setTitle("我的",false);
                 if (mineFragment != null) {
                     manager.beginTransaction().replace(R.id.content, mineFragment).commit();
                 } else {
@@ -127,6 +140,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     manager.beginTransaction().replace(R.id.content, mineFragment).commit();
                 }
                 selected(3);
+                break;
+            case R.id.iv_title_menu:
+                startActivity(new Intent(this,TypeActivity.class));
                 break;
         }
     }
@@ -153,4 +169,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onNewIntent(intent);
         onClick(ll_home);
     }
+
+    /**
+     * 设置title
+     * @param text title上显示的文字
+     * @param b true时显示menu false 时不显示menu
+     */
+    public void setTitle(String text,Boolean b){
+        titleText.setText(text);
+        if (b){
+            titleMenu.setVisibility(View.VISIBLE);
+        }else {
+            titleMenu.setVisibility(View.GONE);
+        }
+
+    }
+
+
 }

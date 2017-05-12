@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuyixiong.interview.tools;
+package com.wuyixiong.interview.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
