@@ -19,12 +19,12 @@ import java.util.ArrayList;
  * Created by WUYIXIONG on 2017-5-11.
  */
 
-public class TypeAdapter extends BaseAdapter {
+public class AttentTypeAdapter extends BaseAdapter {
 
     Context mContext;
     ArrayList<SelectType> data = new ArrayList<>();
 
-    public TypeAdapter(Context context) {
+    public AttentTypeAdapter(Context context) {
         mContext = context;
     }
 

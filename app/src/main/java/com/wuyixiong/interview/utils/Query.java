@@ -40,8 +40,9 @@ public class Query {
      */
     public void queryNews(ArrayList<String> list){
         BmobQuery<News> bmobQuery = new BmobQuery<News>();
+        bmobQuery.addWhereContainedIn("category",list);
+        bmobQuery.setLimit(15);//设置每次显示条数
         Boolean isCache = bmobQuery.hasCachedResult(News.class);
-//        bmobQuery.clearCachedResult(News.class);
         if (isCache){
             bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         }else {
@@ -49,10 +50,6 @@ public class Query {
         }
         //设置缓存保留时间
         bmobQuery.setMaxCacheAge(java.util.concurrent.TimeUnit.DAYS.toMillis(1));
-
-        bmobQuery.addWhereContainedIn("category",list);
-        bmobQuery.setLimit(15);//设置每次显示条数
-
         bmobQuery.findObjects(new FindListener<News>() {
             @Override
             public void done(List<News> list, BmobException e) {
@@ -71,19 +68,24 @@ public class Query {
      */
     public void queryNewsWithouNetwork(ArrayList<String> list){
         BmobQuery<News> bmobQuery = new BmobQuery<News>();
-        bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
         bmobQuery.addWhereContainedIn("category",list);
         bmobQuery.setLimit(15);//设置每次显示条数
-        bmobQuery.findObjects(new FindListener<News>() {
-            @Override
-            public void done(List<News> list, BmobException e) {
-                if (e == null){
-                    EventBus.getDefault().post((ArrayList<News>)list);
-                }else {
-                    Log.i("tag", e.toString());
+        Boolean isCache = bmobQuery.hasCachedResult(News.class);
+        if (isCache){
+            bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);
+            bmobQuery.findObjects(new FindListener<News>() {
+                @Override
+                public void done(List<News> list, BmobException e) {
+                    if (e == null){
+                        EventBus.getDefault().post((ArrayList<News>)list);
+                    }else {
+                        Log.i("tag", e.toString());
+                    }
                 }
-            }
-        });
+            });
+        }else {
+
+        }
     }
 
 

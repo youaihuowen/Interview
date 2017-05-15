@@ -1,13 +1,12 @@
 package com.wuyixiong.interview.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wuyixiong.interview.R;
-import com.wuyixiong.interview.adapter.TypeAdapter;
+import com.wuyixiong.interview.adapter.AttentTypeAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.SelectType;
 
@@ -17,7 +16,7 @@ public class TypeActivity extends BaseActivity {
 
     private TextView done;
     private ListView listView;
-    private TypeAdapter typeAdapter;
+    private AttentTypeAdapter typeAdapter;
     private ArrayList<SelectType> list = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class TypeActivity extends BaseActivity {
         list.add(type3);
         list.add(type4);
         list.add(type5);
-        typeAdapter = new TypeAdapter(this);
+        typeAdapter = new AttentTypeAdapter(this);
         typeAdapter.setData(list);
     }
 

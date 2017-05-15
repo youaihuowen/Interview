@@ -85,11 +85,8 @@ public class HomeFragment extends Fragment {
         if (MainActivity.havaNetwork){
             Query.getInstance().queryNews(queryWhere);
             ((BaseActivity)getActivity()).showLoadingDialog("加载中",true);
-        }else if ((new BmobQuery<News>()).hasCachedResult(News.class)){
-            Query.getInstance().queryNewsWithouNetwork(queryWhere);
-            Toast.makeText(getActivity(),"网络连接不可用",Toast.LENGTH_LONG).show();
-            ((BaseActivity)getActivity()).showLoadingDialog("加载中",true);
         }else {
+            Query.getInstance().queryNewsWithouNetwork(queryWhere);
             Toast.makeText(getActivity(),"网络连接不可用",Toast.LENGTH_LONG).show();
         }
 
