@@ -10,7 +10,16 @@ import cn.bmob.v3.datatype.BmobFile;
 
 public class User extends BmobUser {
 
-    private BmobFile headPortrait;
+    private String headUrl;
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
+
     private String nickName;
 
     public String getNickName() {
@@ -21,11 +30,4 @@ public class User extends BmobUser {
         this.nickName = nickName;
     }
 
-    public BmobFile getHeadPortrait() {
-        return headPortrait;
-    }
-
-    public void setHeadPortrait(BmobFile headPortrait) {
-        this.headPortrait = headPortrait;
-    }
 }

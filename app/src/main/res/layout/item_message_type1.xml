@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/dp5"
+    android:paddingRight="@dimen/dp5"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/part_message_head" />
+
+    <LinearLayout
+        android:id="@+id/ll_message_content1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_message_content_type1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="17dip"
+            android:text="发布的内容" />
+
+        <ImageView
+            android:id="@+id/iv_message_pic_type1"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="@dimen/dp60"
+            android:src="@drawable/default_image"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <include layout="@layout/part_message_bottom" />
+</LinearLayout>

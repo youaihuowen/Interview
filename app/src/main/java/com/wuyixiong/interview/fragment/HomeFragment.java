@@ -22,6 +22,7 @@ import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.event.SendUrl;
 import com.wuyixiong.interview.utils.Query;
+import com.wuyixiong.interview.view.MyDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +69,7 @@ public class HomeFragment extends Fragment {
 //        manager.setOrientation(LinearLayoutManager.VERTICAL);
         GridLayoutManager manager = new GridLayoutManager(getActivity(),1);
         recycle.setLayoutManager(manager);
+        recycle.addItemDecoration(new MyDecoration(getContext(),MyDecoration.VERTICAL_LIST));
         //初始化数据
         initData();
 
