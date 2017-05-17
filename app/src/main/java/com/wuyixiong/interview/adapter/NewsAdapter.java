@@ -1,9 +1,7 @@
 package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,7 @@ import android.view.ViewGroup;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.entity.News;
-import com.wuyixiong.interview.event.SendUrl;
+import com.wuyixiong.interview.event.SendNews;
 import com.wuyixiong.interview.viewholder.NewsViewHolder;
 import com.wuyixiong.interview.viewholder.ViewPagerViewholder;
 
@@ -67,9 +65,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             newsViewHolder.ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SendUrl sendUrl = new SendUrl();
-                    sendUrl.setUrl(data.get(position-1).getUrl());
-                    EventBus.getDefault().post(sendUrl);
+                    SendNews sendNews = new SendNews();
+                    sendNews.setUrl(data.get(position-1).getUrl());
+                    sendNews.setNews(data.get(position-1));
+                    EventBus.getDefault().post(sendNews);
 
                 }
             });

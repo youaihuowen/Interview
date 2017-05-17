@@ -1,6 +1,8 @@
 package com.wuyixiong.interview.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.widget.Toolbar;
@@ -13,13 +15,20 @@ import android.widget.Toast;
 
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.base.BaseActivity;
+import com.wuyixiong.interview.entity.NewsCollection;
+import com.wuyixiong.interview.entity.QuestionCollection;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.utils.LoginedSetId;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -39,12 +48,14 @@ public class RegisterActivity extends BaseActivity {
     @Bind(R.id.btn_register)
     Button register;
     private Toolbar toolbar;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        mContext = this;
         initView();
         //设置toolbar的返回键
         toolbar.setNavigationIcon(R.drawable.toolbar_back_white);
@@ -106,9 +117,9 @@ public class RegisterActivity extends BaseActivity {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e==null){
-                                        registerAccount(account.getText().toString(),
-                                                nickname.getText().toString(),
-                                                pwd.getText().toString());
+                                        registerAccount(account.getText().toString().trim(),
+                                                nickname.getText().toString().trim(),
+                                                pwd.getText().toString().trim());
                                     }else {
                                         toast("验证码不正确");
                                     }
@@ -116,7 +127,9 @@ public class RegisterActivity extends BaseActivity {
                             });
 
                 }
-
+//                registerAccount(account.getText().toString().trim(),
+//                        nickname.getText().toString().trim(),
+//                        pwd.getText().toString().trim());
                 break;
         }
     }
@@ -142,6 +155,8 @@ public class RegisterActivity extends BaseActivity {
                 @Override
                 public void done(User user, BmobException e) {
                     if (e == null) {
+                        LoginedSetId lsid = new LoginedSetId(mContext);
+                        lsid.setCollectionTable(user.getObjectId());
                         registed(account, nickName, password);
                         Log.i("tag", "------------注册成功");
                     } else {
@@ -184,7 +199,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {
-                    Log.i("tag", "-------------登录成功");
+//                    Log.i("tag", "-------------登录成功");
                     cancelDialog();
                     //给登录界面返回结果码使其一起关闭
 //                    setResult(FINISH_TOGETHER);

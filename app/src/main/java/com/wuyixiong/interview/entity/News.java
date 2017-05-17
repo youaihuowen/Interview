@@ -3,6 +3,7 @@ package com.wuyixiong.interview.entity;
 import java.util.Date;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * Created by WUYIXIONG on 2017-5-9.
@@ -54,7 +55,6 @@ public class News extends BmobObject {
     public void setCategory(String category) {
         this.category = category;
     }
-
 
 
 }

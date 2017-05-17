@@ -1,5 +1,7 @@
 package com.wuyixiong.interview.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,11 +22,35 @@ import android.widget.ProgressBar;
 
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.base.BaseActivity;
+import com.wuyixiong.interview.entity.News;
+import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.event.CollectEvent;
+import com.wuyixiong.interview.event.IsCollection;
+import com.wuyixiong.interview.event.SendError;
+import com.wuyixiong.interview.event.SendNews;
+import com.wuyixiong.interview.utils.CollectionOperate;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
 
     private WebView wb;
+
     private String mUrl;
+    private News news;
+
     private Toolbar toolbar;
     private ProgressBar pb;
     private ImageView menu;
@@ -33,6 +59,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     private Button ppCollection;
     private Button ppShare;
     private Button ppCancel;
+    private SharedPreferences shared;
+    private String newsCollectionId;
 
 
     @Override
@@ -40,12 +68,22 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         mUrl = getIntent().getStringExtra("url");
+        news = (News) getIntent().getSerializableExtra("news");
+
+        shared = getSharedPreferences("collectionId", MODE_PRIVATE);
+        newsCollectionId = shared.getString("newsCollectionId", "null");
+
         initView();
         //设置toolbar的返回键
         toolbar.setNavigationIcon(R.drawable.toolbar_back_white);
         //设置webview
         setWebView();
         setListener();
+        //判断该条是否已经收藏
+        CollectionOperate.getInstance().isNewsCollection(newsCollectionId, news.getObjectId());
+
+//        Log.i("tag", "---------------------"+shared.getString("newsCollectionId","null"));
+//        Log.i("tag", "---------------------"+shared.getString("questionCollectionId","null"));
     }
 
     @Override
@@ -54,9 +92,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         toolbar = (Toolbar) findViewById(R.id.toolbar_details);
         pb = (ProgressBar) findViewById(R.id.pb_details);
         menu = (ImageView) findViewById(R.id.iv_menu_detail);
-        ppCancel = (Button) findViewById(R.id.btn_details_popup_cancel);
-        ppCollection = (Button) findViewById(R.id.btn_details_popup_favorite);
-        ppShare = (Button) findViewById(R.id.btn_details_popup_share);
         pp = new PopupWindow();
         initPopupWindow();
 
@@ -78,9 +113,12 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         pp.setTouchable(true);
         pp.setOutsideTouchable(true);
         pp.setBackgroundDrawable(new BitmapDrawable());
-        v.findViewById(R.id.btn_details_popup_favorite).setOnClickListener(this);
-        v.findViewById(R.id.btn_details_popup_share).setOnClickListener(this);
-        v.findViewById(R.id.btn_details_popup_cancel).setOnClickListener(this);
+        ppCancel = (Button) v.findViewById(R.id.btn_details_popup_cancel);
+        ppCollection = (Button) v.findViewById(R.id.btn_details_popup_favorite);
+        ppShare = (Button) v.findViewById(R.id.btn_details_popup_share);
+        ppCollection.setOnClickListener(this);
+        ppCancel.setOnClickListener(this);
+        ppShare.setOnClickListener(this);
 
     }
 
@@ -126,31 +164,91 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         wb.loadUrl(mUrl);
     }
 
-    private void likes(){
-
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && wb.canGoBack()) {
             wb.goBack();
             return true;
-        }
-        return super.onKeyDown(keyCode, event);
+        } else
+            return super.onKeyDown(keyCode, event);
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void success(CollectEvent event) {
+        //收藏成功
+        if (event.isCollected()) {
+            cancelDialog();
+            ppCollection.setText("取消收藏");
+            toast("收藏成功");
+        } else {
+            cancelDialog();
+            ppCollection.setText("收藏");
+            toast("取消成功");
+        }
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void failed(SendError event) {
+        //收藏失败或取消失败
+        if (event.getErrorId() == 2) {
+            cancelDialog();
+            toast(event.getErrorText());
+        } else if (event.getErrorId() == 3) {
+            cancelDialog();
+            toast(event.getErrorText());
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void checked(IsCollection event) {
+        //判断是否已经收藏
+        if (event.isCollected()) {
+            ppCollection.setText("取消收藏");
+        } else {
+            ppCollection.setText("收藏");
+        }
+
+    }
+
+
+    @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.iv_menu_detail:
-                if (pp!=null && pp.isShowing()){
-                    pp.dismiss();
-                }else {
-                    pp.showAsDropDown(toolbar);
+                if (BmobUser.getCurrentUser(User.class) == null) {
+                    toast("请先登录");
+                } else {
+                    if (pp != null && pp.isShowing()) {
+                        pp.dismiss();
+                    } else {
+                        pp.showAsDropDown(toolbar);
+                    }
                 }
                 break;
             case R.id.btn_details_popup_favorite:
-                likes();
+                if (ppCollection.getText().toString().equals("收藏")) {
+                    CollectionOperate.getInstance().addNewsCollection(newsCollectionId, news);
+                } else if (ppCollection.getText().toString().equals("取消收藏")) {
+                    CollectionOperate.getInstance().removeNewsCollection(newsCollectionId, news);
+                }
+                pp.dismiss();
+                showLoadingDialog("稍等", true);
                 break;
             case R.id.btn_details_popup_share:
                 break;

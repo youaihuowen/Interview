@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,7 @@ import com.wuyixiong.interview.activity.MainActivity;
 import com.wuyixiong.interview.adapter.NewsAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.News;
-import com.wuyixiong.interview.event.SendUrl;
+import com.wuyixiong.interview.event.SendNews;
 import com.wuyixiong.interview.utils.Query;
 import com.wuyixiong.interview.view.MyDecoration;
 
@@ -29,8 +27,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-
-import cn.bmob.v3.BmobQuery;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,10 +99,11 @@ public class HomeFragment extends Fragment {
         ((BaseActivity)getActivity()).cancelDialog();
     }
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
-    public void goDetails(SendUrl sendUrl) {
+    public void goDetails(SendNews sendNews) {
         //跳转到详细信息页面
         Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("url",sendUrl.getUrl());
+        intent.putExtra("url",sendNews.getUrl());
+        intent.putExtra("news",sendNews.getNews());
         startActivity(intent);
     }
 

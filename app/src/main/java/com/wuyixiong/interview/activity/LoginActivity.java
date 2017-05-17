@@ -1,5 +1,6 @@
 package com.wuyixiong.interview.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.utils.LoginedSetId;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,12 +41,14 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.iv_login_weibo)
     ImageView ivLoginWeibo;
     private Toolbar toolbar;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        mContext = this;
         initView();
         //设置toolbar的返回键
         toolbar.setNavigationIcon(R.drawable.toolbar_back_white);
@@ -75,8 +79,8 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
-                String username = editName.getText().toString();
-                String password = editPwd.getText().toString();
+                String username = editName.getText().toString().trim();
+                String password = editPwd.getText().toString().trim();
                 if (username.length()>0 && password.length()>0){
                     showLoadingDialog("登录中",true);
                     User user = new User();
@@ -86,6 +90,8 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void done(User user, BmobException e) {
                             if (e == null){
+                                LoginedSetId lsid = new LoginedSetId(mContext);
+                                lsid.getCollectionId(user.getObjectId());
                                 cancelDialog();
                                 goMainActivity();
                             }else {
