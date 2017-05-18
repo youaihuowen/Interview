@@ -15,11 +15,18 @@ import android.widget.TextView;
 
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.activity.LoginActivity;
+import com.wuyixiong.interview.activity.MainActivity;
 import com.wuyixiong.interview.activity.MyInfoActivity;
 import com.wuyixiong.interview.adapter.MineAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.MineItem;
+import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.event.LoginedEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -49,6 +56,7 @@ public class MineFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         initView(view);
+        EventBus.getDefault().register(this);
         initData();
         adapter = new MineAdapter(getContext());
         adapter.setData(data);
@@ -148,4 +156,18 @@ public class MineFragment extends Fragment {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onFinishQuery(LoginedEvent event) {
+        if (event.isLogined()){
+            isLogined(true);
+        }else {
+            isLogined(false);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

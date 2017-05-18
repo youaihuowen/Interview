@@ -18,7 +18,10 @@ import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.NewsCollection;
 import com.wuyixiong.interview.entity.QuestionCollection;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.event.LoginedEvent;
 import com.wuyixiong.interview.utils.LoginedSetId;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -204,6 +207,7 @@ public class RegisterActivity extends BaseActivity {
                     //给登录界面返回结果码使其一起关闭
 //                    setResult(FINISH_TOGETHER);
 //                    finish();
+                    EventBus.getDefault().post(new LoginedEvent(true));
                     goMainActivity();
 
                 } else {
@@ -221,7 +225,6 @@ public class RegisterActivity extends BaseActivity {
      */
     public void goMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-
         startActivity(intent);
     }
 

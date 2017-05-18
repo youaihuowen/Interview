@@ -14,7 +14,10 @@ import android.widget.TextView;
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.event.LoginedEvent;
 import com.wuyixiong.interview.utils.LoginedSetId;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,7 +25,7 @@ import butterknife.OnClick;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity  {
 
     @Bind(R.id.edit_name)
     EditText editName;
@@ -93,6 +96,7 @@ public class LoginActivity extends BaseActivity {
                                 LoginedSetId lsid = new LoginedSetId(mContext);
                                 lsid.getCollectionId(user.getObjectId());
                                 cancelDialog();
+                                EventBus.getDefault().post(new LoginedEvent(true));
                                 goMainActivity();
                             }else {
                                 cancelDialog();
@@ -138,7 +142,7 @@ public class LoginActivity extends BaseActivity {
      */
     public void goMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-
         startActivity(intent);
     }
+
 }

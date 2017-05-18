@@ -3,6 +3,7 @@ package com.wuyixiong.interview.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -112,6 +113,12 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
     public void setListener() {
         horlist1.setOnItemClickListener(this);
         horlist2.setOnItemClickListener(this);
+
+        //为了解决切换fragment后scrollview不置顶的问题
+        ivHead.setFocusableInTouchMode(true);
+        ivHead.setFocusable(true);
+        ivHead.requestFocus();
+
         sv.setOnScrollListener(this);
     }
 
@@ -146,9 +153,12 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
         listView.setAdapter(questionAdapter);
     }
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Toast.makeText(getContext(),"---------",Toast.LENGTH_SHORT).show();
         ButterKnife.unbind(this);
     }
 
@@ -176,6 +186,7 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
         queryQuestion(typeList.get(i));
         typeAdapter.notifyDataSetChanged();
     }
+
 
     /**
      * 查询面试题

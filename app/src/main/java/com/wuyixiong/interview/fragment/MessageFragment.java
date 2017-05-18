@@ -71,10 +71,12 @@ public class MessageFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishQuery(ArrayList<Message> message) {
         //查询完成
-        queryResult = message;
-        adapter.setData(queryResult);
-        adapter.notifyDataSetChanged();
-        ((BaseActivity) getActivity()).cancelDialog();
+        if (message.get(0) instanceof Message){
+            queryResult = message;
+            adapter.setData(queryResult);
+            adapter.notifyDataSetChanged();
+            ((BaseActivity) getActivity()).cancelDialog();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行

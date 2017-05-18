@@ -6,6 +6,9 @@ import android.widget.Button;
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.event.LoginedEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,6 +41,12 @@ public class MyInfoActivity extends BaseActivity {
     @OnClick(R.id.btn_quit)
     public void onViewClicked() {
         BmobUser.logOut();
+        EventBus.getDefault().post(new LoginedEvent(false));
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

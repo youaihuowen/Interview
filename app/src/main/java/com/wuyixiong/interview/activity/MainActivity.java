@@ -2,7 +2,9 @@ package com.wuyixiong.interview.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -37,6 +39,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager manager;
 
     public static Boolean havaNetwork;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +52,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //创建主页的fragment
         homeFragment = new HomeFragment();
         manager = getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.content, homeFragment).commit();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.content, homeFragment);
+        transaction.commit();
         iv_home.setSelected(true);
         //判断是否有网
         havaNetwork = isNetworkAvailable(this);
@@ -102,47 +110,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_home_main:
-                setTitle("首页",true);
-                if (homeFragment != null) {
-                    manager.beginTransaction().replace(R.id.content, homeFragment).commit();
-                } else {
-                    homeFragment = new HomeFragment();
-                    manager.beginTransaction().replace(R.id.content, homeFragment).commit();
-                }
+                setTitle("首页", true);
+                showFragment(0);
                 selected(0);
                 break;
             case R.id.ll_interview_main:
-                setTitle("面试",false);
-                if (interviewFragment != null) {
-                    manager.beginTransaction().replace(R.id.content, interviewFragment).commit();
-                } else {
-                    interviewFragment = new InterviewFragment();
-                    manager.beginTransaction().replace(R.id.content, interviewFragment).commit();
-                }
+                setTitle("面试", false);
+                showFragment(1);
                 selected(1);
                 break;
             case R.id.ll_message_main:
-                setTitle("消息",false);
-                if (messageFragment != null) {
-                    manager.beginTransaction().replace(R.id.content, messageFragment).commit();
-                } else {
-                    messageFragment = new MessageFragment();
-                    manager.beginTransaction().replace(R.id.content, messageFragment).commit();
-                }
+                setTitle("消息", false);
+                showFragment(2);
                 selected(2);
                 break;
             case R.id.ll_mine_main:
-                setTitle("我的",false);
-                if (mineFragment != null) {
-                    manager.beginTransaction().replace(R.id.content, mineFragment).commit();
-                } else {
-                    mineFragment = new MineFragment();
-                    manager.beginTransaction().replace(R.id.content, mineFragment).commit();
-                }
+                setTitle("我的", false);
+                showFragment(3);
                 selected(3);
                 break;
             case R.id.iv_title_menu:
-                startActivity(new Intent(this,TypeActivity.class));
+                startActivity(new Intent(this, TypeActivity.class));
                 break;
         }
     }
@@ -164,25 +152,80 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        onClick(ll_home);
-    }
-
     /**
      * 设置title
+     *
      * @param text title上显示的文字
-     * @param b true时显示menu false 时不显示menu
+     * @param b    true时显示menu false 时不显示menu
      */
-    public void setTitle(String text,Boolean b){
+    public void setTitle(String text, Boolean b) {
         titleText.setText(text);
-        if (b){
+        if (b) {
             titleMenu.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             titleMenu.setVisibility(View.GONE);
         }
 
+    }
+
+    /**
+     * 切换显示的fragment
+     * @param id
+     */
+    public void showFragment(int id){
+        FragmentTransaction t = manager.beginTransaction();
+        hideAllFragment(t);
+       switch (id){
+           case 0:
+               if (homeFragment != null) {
+                   t.show(homeFragment);
+
+               } else {
+                   homeFragment = new HomeFragment();
+                   t.add(R.id.content, homeFragment);
+               }
+               break;
+           case 1:
+               if (interviewFragment != null) {
+                   t.show(interviewFragment);
+               } else {
+                   interviewFragment = new InterviewFragment();
+                   t.add(R.id.content, interviewFragment);
+               }
+               break;
+           case 2:
+               if (messageFragment != null) {
+                   t.show(messageFragment);
+               } else {
+                   messageFragment = new MessageFragment();
+                   t.add(R.id.content, messageFragment);
+               }
+               break;
+           case 3:
+               if (mineFragment != null) {
+                   t.show(mineFragment);
+               } else {
+                   mineFragment = new MineFragment();
+                   t.add(R.id.content, mineFragment);
+               }
+               break;
+       }
+       t.commit();
+    }
+
+    /**
+     * 隐藏所有fragment
+     * @param t
+     */
+    public void hideAllFragment(FragmentTransaction t){
+        if (homeFragment != null)
+            t.hide(homeFragment);
+        if (interviewFragment != null)
+            t.hide(interviewFragment);
+        if (messageFragment !=null)
+            t.hide(messageFragment);
+        if (mineFragment !=null)
+            t.hide(mineFragment);
     }
 
 

@@ -2,12 +2,14 @@ package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
+import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.event.SendNews;
 import com.wuyixiong.interview.viewholder.NewsViewHolder;
@@ -58,7 +60,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof NewsViewHolder){
             NewsViewHolder newsViewHolder = (NewsViewHolder)holder;
+            if (data.get(position-1) instanceof News){
+                Log.i("tag", "++++++++++++++++++++++++++++++");
+            }
+
+//            Log.i("tag", "----------------------"+data.get(position-1).toString());
             newsViewHolder.newsTitle.setText(data.get(position-1).getTitle());
+//            Log.i("tag", "----------------------"+data.get(position-1).toString());
             newsViewHolder.newsTime.setText(data.get(position-1).getUpdatedAt().substring(0,10));
             ImageLoader.getInstance().displayImage(data.get(position-1).getPic_url(),
                     newsViewHolder.newsImage);

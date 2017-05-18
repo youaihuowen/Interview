@@ -93,10 +93,13 @@ public class HomeFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishQuery(ArrayList<News> newses) {
         //查询完成
-        queryResult = newses;
-        adapter.setData(queryResult);
-        adapter.notifyDataSetChanged();
-        ((BaseActivity)getActivity()).cancelDialog();
+        if (newses.get(0) instanceof News){
+            queryResult = newses;
+            adapter.setData(queryResult);
+            adapter.notifyDataSetChanged();
+            ((BaseActivity)getActivity()).cancelDialog();
+        }
+
     }
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void goDetails(SendNews sendNews) {
