@@ -112,6 +112,7 @@ public class LoginedSetId {
                     SharedPreferences.Editor editor = shared.edit();
                     editor.putString("newsCollectionId",list.get(0).getObjectId());
                     editor.commit();
+
                 }else {
                     Log.i("tag", "---------------------"+"获取newsCollectionId失败");
                 }
@@ -130,6 +131,7 @@ public class LoginedSetId {
                     SharedPreferences.Editor editor = shared.edit();
                     editor.putString("questionCollectionId",list.get(0).getObjectId());
                     editor.commit();
+                    CollectionOperate.getInstance().AddAllQuestion(mContext,list.get(0).getObjectId());
                 }else {
                     Log.i("tag", "---------------------"+"获取questionCollectionId失败");
 

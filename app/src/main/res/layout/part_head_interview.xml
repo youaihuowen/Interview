@@ -25,13 +25,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
+            android:padding="@dimen/dp10"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp60"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
                 android:src="@drawable/explorer_hot" />
 
             <TextView
@@ -47,12 +47,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="@dimen/dp10"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp60"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
                 android:src="@drawable/explore_post" />
 
             <TextView
@@ -68,12 +69,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="@dimen/dp10"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp60"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
                 android:src="@drawable/explorer_collection" />
 
             <TextView
@@ -89,12 +91,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="@dimen/dp10"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp60"
-                android:layout_height="@dimen/dp60"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
                 android:src="@drawable/explorer_offline" />
 
             <TextView

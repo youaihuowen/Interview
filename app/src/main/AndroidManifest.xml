@@ -36,7 +36,10 @@
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.MyInfoActivity" />
         <activity android:name=".activity.DetailActivity" />
-        <activity android:name=".activity.TypeActivity"></activity>
+        <activity android:name=".activity.TypeActivity" />
+        <activity android:name=".activity.QuestionActivity" />
+        <activity android:name=".activity.RecommendActivity" />
+        <activity android:name=".activity.RecommedDetailActivity"></activity>
     </application>
 
 </manifest>

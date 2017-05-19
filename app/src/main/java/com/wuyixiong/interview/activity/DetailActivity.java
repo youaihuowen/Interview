@@ -67,6 +67,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
         mUrl = getIntent().getStringExtra("url");
         news = (News) getIntent().getSerializableExtra("news");
 

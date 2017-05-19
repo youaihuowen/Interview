@@ -1,6 +1,7 @@
 package com.wuyixiong.interview.fragment;
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,10 +20,13 @@ import android.widget.Toast;
 
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.activity.MainActivity;
+import com.wuyixiong.interview.activity.QuestionActivity;
+import com.wuyixiong.interview.activity.RecommendActivity;
 import com.wuyixiong.interview.adapter.QuestionAdapter;
 import com.wuyixiong.interview.adapter.QuestionTypeAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.Question;
+import com.wuyixiong.interview.entity.QuestionList;
 import com.wuyixiong.interview.view.HorizontalListView;
 import com.wuyixiong.interview.view.MyListView;
 import com.wuyixiong.interview.view.MyScrollView;
@@ -120,6 +124,15 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
         ivHead.requestFocus();
 
         sv.setOnScrollListener(this);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), QuestionActivity.class);
+                intent.putExtra("questionList",new QuestionList(questionList,i));
+                startActivity(intent);
+            }
+        });
     }
 
     public void setData() {
@@ -170,16 +183,35 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
             case R.id.iv_head_interview:
                 break;
             case R.id.ll_explorer_hot:
+                Intent intent0 = new Intent(getActivity(), RecommendActivity.class);
+                intent0.putExtra("recommendtype","recommend");
+                startActivity(intent0);
                 break;
             case R.id.ll_explorer_post:
+                Intent intent1 = new Intent(getActivity(), RecommendActivity.class);
+                intent1.putExtra("recommendtype","skill");
+                startActivity(intent1);
                 break;
             case R.id.ll_explorer_collection:
+                Intent intent2 = new Intent(getActivity(), RecommendActivity.class);
+                intent2.putExtra("recommendtype","company");
+                startActivity(intent2);
                 break;
             case R.id.ll_explorer_offline:
+                Intent intent3 = new Intent(getActivity(), RecommendActivity.class);
+                intent3.putExtra("recommendtype","offline");
+                startActivity(intent3);
                 break;
         }
     }
 
+    /**
+     * 类型listview的点击监听
+     * @param adapterView
+     * @param view
+     * @param i
+     * @param l
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         typeAdapter.setSelected(i);
@@ -195,7 +227,6 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
      */
     private void queryQuestion(String s) {
         BmobQuery<Question> query = new BmobQuery<>();
-        query.addQueryKeys("title");
         query.addWhereEqualTo("type", s);
         if (MainActivity.havaNetwork){
             query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);

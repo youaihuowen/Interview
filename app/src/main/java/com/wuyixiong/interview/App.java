@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.wuyixiong.interview.db.DBManager;
 
 import java.io.File;
 
@@ -28,6 +29,7 @@ public class App extends Application {
         super.onCreate();
         //配置imageloader
         initImageLoader();
+        DBManager.getInstance(this);
     }
 
     public void initImageLoader() {

@@ -1,15 +1,22 @@
 package com.wuyixiong.interview.utils;
 
+import android.content.Intent;
 import android.icu.util.TimeUnit;
 import android.util.Log;
 import android.util.TimeUtils;
 import android.widget.Toast;
 
+import com.wuyixiong.interview.activity.DetailActivity;
 import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.News;
+import com.wuyixiong.interview.entity.Recommend;
+import com.wuyixiong.interview.event.RecommendEvent;
 import com.wuyixiong.interview.event.SendError;
+import com.wuyixiong.interview.event.SendNews;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +117,29 @@ public class Query {
                 }else {
                     SendError error = new SendError(e.getMessage(),1);
                     EventBus.getDefault().post(error);
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 根据推荐类型查询内容
+     * @param recommendType
+     */
+    public void queryRecommend(String recommendType){
+        BmobQuery<Recommend>  query = new BmobQuery<>("recommend");
+        query.addWhereEqualTo("recommendType",recommendType);
+        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        //设置缓存保留时间
+        query.setMaxCacheAge(java.util.concurrent.TimeUnit.DAYS.toMillis(1));
+        query.findObjects(new FindListener<Recommend>() {
+            @Override
+            public void done(List<Recommend> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new RecommendEvent((ArrayList<Recommend>) list));
+                }else {
+                    EventBus.getDefault().post(new SendError("加载失败",4));
                 }
             }
         });

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dp5"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/ll_item_recommend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_marginLeft="@dimen/dp5"
+            android:layout_marginRight="@dimen/dp5"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_item_recommendtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dp20"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="标题"/>
+            <TextView
+                android:id="@+id/tv_item_likeordate"
+                android:layout_marginTop="@dimen/dp10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ksw_md_solid_checked_disable"
+                android:text="0喜欢*2017——5——19"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_item_interview"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="@dimen/dp70"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_image"/>
+
+    </LinearLayout>
+
+</LinearLayout>

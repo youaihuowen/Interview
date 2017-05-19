@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.base.BaseActivity;
+import com.wuyixiong.interview.db.DBManager;
 import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.event.LoginedEvent;
+import com.wuyixiong.interview.utils.CollectionOperate;
 import com.wuyixiong.interview.utils.LoginedSetId;
 
 import org.greenrobot.eventbus.EventBus;
