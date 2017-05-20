@@ -25,6 +25,7 @@
         android:background="@color/white"
         android:orientation="horizontal">
         <com.wuyixiong.interview.view.CircleImageView
+            android:id="@+id/cv_icon"
             android:layout_marginLeft="@dimen/dp30"
             android:layout_marginRight="@dimen/dp30"
             android:layout_width="@dimen/dp60"

@@ -12,6 +12,33 @@ import cn.bmob.v3.datatype.BmobRelation;
 public class User extends BmobUser {
 
     private String headUrl;
+    private boolean changed;
+    private String sex;
+    private String job;
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
     public String getHeadUrl() {
         return headUrl;

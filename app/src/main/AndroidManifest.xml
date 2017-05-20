@@ -39,7 +39,8 @@
         <activity android:name=".activity.TypeActivity" />
         <activity android:name=".activity.QuestionActivity" />
         <activity android:name=".activity.RecommendActivity" />
-        <activity android:name=".activity.RecommedDetailActivity"></activity>
+        <activity android:name=".activity.RecommedDetailActivity" />
+        <activity android:name=".activity.CollectionActivity"></activity>
     </application>
 
 </manifest>

@@ -12,6 +12,8 @@ import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.event.CollectEvent;
 import com.wuyixiong.interview.event.IsCollection;
 import com.wuyixiong.interview.event.SendError;
+import com.wuyixiong.interview.event.SendNewsList;
+import com.wuyixiong.interview.event.SendQuestionList;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -113,7 +115,7 @@ public class CollectionOperate {
             @Override
             public void done(List<News> list, BmobException e) {
                 if (e == null) {
-
+                    EventBus.getDefault().post(new SendNewsList((ArrayList<News>) list));
                 }
             }
         });
@@ -215,7 +217,9 @@ public class CollectionOperate {
         query.findObjects(new FindListener<Question>() {
             @Override
             public void done(List<Question> list, BmobException e) {
-
+                if (e == null){
+                    EventBus.getDefault().post(new SendQuestionList((ArrayList<Question>) list));
+                }
             }
         });
 

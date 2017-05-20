@@ -21,7 +21,7 @@ import com.wuyixiong.interview.R;
 public abstract class BaseActivity extends FragmentActivity {
 
     public static final int FINISH_TOGETHER = 0;
-    public static final int LOGOUT_CODE = 0;
+    public static final int LOGOUT_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

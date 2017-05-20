@@ -9,11 +9,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
+import com.wuyixiong.interview.activity.CollectionActivity;
 import com.wuyixiong.interview.activity.LoginActivity;
 import com.wuyixiong.interview.activity.MainActivity;
 import com.wuyixiong.interview.activity.MyInfoActivity;
@@ -23,6 +26,7 @@ import com.wuyixiong.interview.entity.MineItem;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.event.LoginedEvent;
+import com.wuyixiong.interview.view.CircleImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +49,7 @@ public class MineFragment extends Fragment {
     private TextView tvUlogin;
     private TextView tvUsername;
     private TextView tvnickname;
+    private CircleImageView cv;
     private boolean islogin = false;
 
     public MineFragment() {
@@ -88,6 +93,7 @@ public class MineFragment extends Fragment {
         tvnickname = (TextView) view.findViewById(R.id.tv_nick_mime);
         tvUsername = (TextView) view.findViewById(R.id.tv_user_mine);
         tvUlogin = (TextView) view.findViewById(R.id.tv_unlogin_mine);
+        cv = (CircleImageView) view.findViewById(R.id.cv_icon);
     }
 
     /**
@@ -118,13 +124,44 @@ public class MineFragment extends Fragment {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (islogin){
-                    startActivityForResult(new Intent(getActivity(),MyInfoActivity.class),
+                if (islogin) {
+                    startActivityForResult(new Intent(getActivity(), MyInfoActivity.class),
                             BaseActivity.LOGOUT_CODE);
-                }else {
+                } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
                 }
+            }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        Intent intent = new Intent(getContext(), CollectionActivity.class);
+                        intent.putExtra("id",0);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(getContext(), CollectionActivity.class);
+                        intent1.putExtra("id",1);
+                        startActivity(intent1);
+                        break;
+                    case 2:
+                        Intent intent2 = new Intent(getContext(), CollectionActivity.class);
+                        intent2.putExtra("id",2);
+                        startActivity(intent2);
+                        break;
+                    case 4:
+
+                        break;
+                    case 5:
+
+                        break;
+                    default:
+                }
+
             }
         });
     }
@@ -145,6 +182,7 @@ public class MineFragment extends Fragment {
             tvUsername.setVisibility(View.VISIBLE);
             tvnickname.setText(nickname);
             tvnickname.setVisibility(View.VISIBLE);
+            ImageLoader.getInstance().displayImage((String) BmobUser.getObjectByKey("headUrl"), cv);
         } else {
             islogin = false;
 
@@ -156,11 +194,12 @@ public class MineFragment extends Fragment {
         }
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishQuery(LoginedEvent event) {
-        if (event.isLogined()){
+        if (event.isLogined()) {
             isLogined(true);
-        }else {
+        } else {
             isLogined(false);
         }
     }

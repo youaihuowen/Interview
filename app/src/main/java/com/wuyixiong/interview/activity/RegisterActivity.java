@@ -154,6 +154,9 @@ public class RegisterActivity extends BaseActivity {
             user.setUsername(account);
             user.setNickName(nickName);
             user.setPassword(password);
+            //默认填入的数据
+            user.setChanged(false);
+            user.setSex("男");
             user.signUp(new SaveListener<User>() {
                 @Override
                 public void done(User user, BmobException e) {
