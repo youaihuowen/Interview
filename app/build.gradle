@@ -39,5 +39,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.kyleduo.switchbutton:library:1.4.6'
+    compile 'com.foamtrace:photopicker:1.0'
     testCompile 'junit:junit:4.12'
 }

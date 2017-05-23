@@ -40,7 +40,17 @@
         <activity android:name=".activity.QuestionActivity" />
         <activity android:name=".activity.RecommendActivity" />
         <activity android:name=".activity.RecommedDetailActivity" />
-        <activity android:name=".activity.CollectionActivity"></activity>
+        <activity android:name=".activity.CollectionActivity" />
+        <activity android:name=".activity.MessageDetailActivity" />
+        <activity android:name=".activity.ShareActivity"
+            android:windowSoftInputMode="adjustPan|stateUnchanged">
+        </activity>
+        <activity
+            android:name="com.foamtrace.photopicker.PhotoPickerActivity"
+            android:theme="@style/PhotoPickerTheme"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name="com.foamtrace.photopicker.PhotoPreviewActivity"
+            android:theme="@style/PhotoPickerTheme"/>
     </application>
 
 </manifest>

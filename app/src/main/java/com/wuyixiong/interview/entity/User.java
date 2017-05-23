@@ -58,4 +58,8 @@ public class User extends BmobUser {
         this.nickName = nickName;
     }
 
+    @Override
+    public String toString() {
+        return getUsername()+"////"+nickName+"////"+headUrl;
+    }
 }

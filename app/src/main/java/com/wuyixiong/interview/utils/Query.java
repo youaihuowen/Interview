@@ -7,9 +7,11 @@ import android.util.TimeUtils;
 import android.widget.Toast;
 
 import com.wuyixiong.interview.activity.DetailActivity;
+import com.wuyixiong.interview.entity.Comment;
 import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.entity.Recommend;
+import com.wuyixiong.interview.event.CommentEvent;
 import com.wuyixiong.interview.event.RecommendEvent;
 import com.wuyixiong.interview.event.SendError;
 import com.wuyixiong.interview.event.SendNews;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
@@ -143,6 +147,56 @@ public class Query {
                 }
             }
         });
+    }
+
+    /**
+     * 查询消息的评论
+     * @param messageId
+     */
+    public void queryComment(String messageId){
+        BmobQuery<Comment> query = new BmobQuery<>();
+        Message message = new Message();
+        message.setObjectId(messageId);
+        query.addWhereEqualTo("message",new BmobPointer(message));
+        query.order("updateAt");
+        query.include("author");
+        query.findObjects(new FindListener<Comment>() {
+            @Override
+            public void done(List<Comment> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,0));
+                    if (list.get(0).getAuthor() == null){
+                        Log.i("tag", "-----------------"+"user 为 NULL");
+                    }else {
+                        Log.i("tag", "-----------------"+list.get(0).getAuthor().toString());
+                        Log.i("tag", "-----------------"+list.get(1).getAuthor().toString());
+                        Log.i("tag", "-----------------"+list.get(2).getAuthor().toString());
+                    }
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 查询评论的子评论
+     * @param commentId
+     */
+    public void queryZiComment(String commentId){
+        BmobQuery<Comment> query = new BmobQuery<>();
+        Comment comment = new Comment();
+        comment.setObjectId(commentId);
+        query.addWhereRelatedTo("zi_comment",new BmobPointer(comment));
+        query.include("user");
+        query.findObjects(new FindListener<Comment>() {
+            @Override
+            public void done(List<Comment> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,1));
+                }
+            }
+        });
+
     }
 
 

@@ -95,6 +95,7 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
         setData();
         setListView();
         setListener();
+        //获得高度
         ViewTreeObserver vto = partHead.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

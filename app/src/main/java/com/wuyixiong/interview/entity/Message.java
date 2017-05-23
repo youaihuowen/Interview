@@ -1,12 +1,15 @@
 package com.wuyixiong.interview.entity;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * Created by WUYIXIONG on 2017-5-15.
  */
 
-public class Message extends BmobObject {
+public class Message extends BmobObject implements Serializable {
     private User author;
     private String type;
     private int picType;
@@ -88,4 +91,5 @@ public class Message extends BmobObject {
     public void setAuthor(User author) {
         this.author = author;
     }
+
 }
