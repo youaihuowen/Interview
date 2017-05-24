@@ -1,7 +1,10 @@
 package com.wuyixiong.interview.activity;
 
+import android.content.Context;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -12,9 +15,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.adapter.CommentAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
+import com.wuyixiong.interview.entity.Comment;
 import com.wuyixiong.interview.entity.Message;
-import com.wuyixiong.interview.entity.News;
+import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.event.CommentEvent;
+import com.wuyixiong.interview.utils.Publication;
 import com.wuyixiong.interview.utils.Query;
 import com.wuyixiong.interview.view.CircleImageView;
 import com.wuyixiong.interview.view.MyListView;
@@ -23,11 +28,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 
 public class MessageDetailActivity extends BaseActivity {
 
@@ -57,6 +63,8 @@ public class MessageDetailActivity extends BaseActivity {
     FrameLayout flComment;
     @Bind(R.id.iv_send)
     ImageView ivSend;
+    @Bind(R.id.tv_num)
+    TextView tvNum;
 
     private ListView listView;
 
@@ -82,9 +90,9 @@ public class MessageDetailActivity extends BaseActivity {
         adapter = new CommentAdapter(this);
         listView.setAdapter(adapter);
 
-        ImageLoader.getInstance().displayImage(message.getAuthor().getHeadUrl(),cvIcon);
+        ImageLoader.getInstance().displayImage(message.getAuthor().getHeadUrl(), cvIcon);
         tvNickNime.setText(message.getAuthor().getNickName());
-        tvDate.setText(message.getUpdatedAt().substring(0,10));
+        tvDate.setText(message.getUpdatedAt().substring(0, 10));
         tvCompany.setText(message.getCompany());
         tvContent.setText(message.getContents());
         switch (message.getPicType()) {
@@ -92,38 +100,38 @@ public class MessageDetailActivity extends BaseActivity {
                 break;
             case 1:
                 ivPic1.setVisibility(View.VISIBLE);
-                ImageLoader.getInstance().displayImage(message.getPic1(),ivPic1);
+                ImageLoader.getInstance().displayImage(message.getPic1(), ivPic1);
                 break;
             case 2:
                 ivPic1.setVisibility(View.VISIBLE);
                 ivPic2.setVisibility(View.VISIBLE);
-                ImageLoader.getInstance().displayImage(message.getPic1(),ivPic1);
-                ImageLoader.getInstance().displayImage(message.getPic2(),ivPic2);
+                ImageLoader.getInstance().displayImage(message.getPic1(), ivPic1);
+                ImageLoader.getInstance().displayImage(message.getPic2(), ivPic2);
                 break;
             case 3:
                 ivPic1.setVisibility(View.VISIBLE);
                 ivPic2.setVisibility(View.VISIBLE);
                 ivPic3.setVisibility(View.VISIBLE);
-                ImageLoader.getInstance().displayImage(message.getPic1(),ivPic1);
-                ImageLoader.getInstance().displayImage(message.getPic2(),ivPic2);
-                ImageLoader.getInstance().displayImage(message.getPic3(),ivPic3);
+                ImageLoader.getInstance().displayImage(message.getPic1(), ivPic1);
+                ImageLoader.getInstance().displayImage(message.getPic2(), ivPic2);
+                ImageLoader.getInstance().displayImage(message.getPic3(), ivPic3);
                 break;
             case 4:
                 ivPic1.setVisibility(View.VISIBLE);
                 ivPic2.setVisibility(View.VISIBLE);
                 ivPic3.setVisibility(View.VISIBLE);
                 ivPic4.setVisibility(View.VISIBLE);
-                ImageLoader.getInstance().displayImage(message.getPic1(),ivPic1);
-                ImageLoader.getInstance().displayImage(message.getPic2(),ivPic2);
-                ImageLoader.getInstance().displayImage(message.getPic3(),ivPic3);
-                ImageLoader.getInstance().displayImage(message.getPic4(),ivPic4);
+                ImageLoader.getInstance().displayImage(message.getPic1(), ivPic1);
+                ImageLoader.getInstance().displayImage(message.getPic2(), ivPic2);
+                ImageLoader.getInstance().displayImage(message.getPic3(), ivPic3);
+                ImageLoader.getInstance().displayImage(message.getPic4(), ivPic4);
                 break;
             default:
         }
 
     }
 
-    private void setData(){
+    private void setData() {
         Query.getInstance().queryComment(message.getObjectId());
     }
 
@@ -146,6 +154,18 @@ public class MessageDetailActivity extends BaseActivity {
             case R.id.fl_comment:
                 break;
             case R.id.iv_send:
+                String text = editComment.getText().toString().trim();
+                if (text.length() > 0){
+                    showLoadingDialog("发送中",true);
+                    Publication.getInstance().publishComment(message.getObjectId(), text);
+                }
+                else
+                    toast("评论不能为空");
+                //关闭软键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
+                }
                 break;
         }
     }
@@ -164,10 +184,28 @@ public class MessageDetailActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishQuery(CommentEvent event) {
-        //查询完成
-        if (event.getType() == 0){
+        //查询完成  是否添加评论
+        if (event.getType() == 0) {
             adapter.setData(event.getList());
             adapter.notifyDataSetChanged();
+            tvNum.setText(event.getList().size() + "");
+        }
+        if (event.isAddComment()) {
+//            Query.getInstance().queryComment(message.getObjectId());
+            Comment c = new Comment();
+            c.setAuthor(BmobUser.getCurrentUser(User.class));
+            c.setZan(0);
+            c.setContent(editComment.getText().toString().trim());
+            c.setMessage(message);
+
+            adapter.addData(c);
+            adapter.notifyDataSetChanged();
+            editComment.setText("");
+            tvNum.setText((Integer.parseInt(tvNum.getText().toString())+1)+"");
+            cancelDialog();
+            toast("添加成功");
+
+
         }
     }
 }

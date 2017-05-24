@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     tools:context="com.wuyixiong.interview.fragment.MessageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_message"
+
+    <com.yalantis.phoenix.PullToRefreshView
+        android:id="@+id/rf_contain"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.yalantis.phoenix.PullToRefreshView>
+
 
 </FrameLayout>

@@ -35,7 +35,6 @@ public class RecommedDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         //设置toolbar的返回键
         toolbar.setNavigationIcon(R.drawable.toolbar_back_white);
-
         mUrl = getIntent().getStringExtra("url");
         position = getIntent().getIntExtra("position",0);
 
@@ -52,7 +51,12 @@ public class RecommedDetailActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     /**

@@ -1,8 +1,6 @@
 package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,7 @@ import com.wuyixiong.interview.entity.Comment;
 import com.wuyixiong.interview.view.CircleImageView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by WUYIXIONG on 2017-5-22.
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 public class CommentAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Comment> data = new ArrayList<>() ;
+    private ArrayList<Comment> data = new ArrayList<>();
 
     public CommentAdapter(Context context) {
         this.context = context;
@@ -32,6 +31,10 @@ public class CommentAdapter extends BaseAdapter {
 
     public void setData(ArrayList<Comment> data) {
         this.data = data;
+    }
+
+    public void addData(Comment c) {
+        data.add(0, c);
     }
 
     @Override
@@ -53,22 +56,30 @@ public class CommentAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         CviewHolder holder = null;
         if (view == null) {
-            view= LayoutInflater.from(context).inflate(R.layout.item_comment, null);
+            view = LayoutInflater.from(context).inflate(R.layout.item_comment, null);
             holder = new CviewHolder(view);
             view.setTag(holder);
-        }else {
+        } else {
             holder = (CviewHolder) view.getTag();
         }
-        ImageLoader.getInstance().displayImage(data.get(i).getAuthor().getHeadUrl(),holder.cv);
+        ImageLoader.getInstance().displayImage(data.get(i).getAuthor().getHeadUrl(), holder.cv);
         holder.tvName.setText(data.get(i).getAuthor().getNickName());
-        holder.tvDate.setText(data.get(i).getUpdatedAt().substring(0,10));
+        if (data.get(i).getUpdatedAt() == null) {
+            String str = "";
+            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("MM-dd HH:mm");
+            Date date = new Date(System.currentTimeMillis());
+            str = format.format(date);
+            holder.tvDate.setText(str);
+        } else {
+            holder.tvDate.setText(data.get(i).getUpdatedAt().substring(5, 16));
+        }
         holder.tvMessage.setText(data.get(i).getContent());
-        holder.tvZanNum.setText(data.get(i).getZan()+"");
+        holder.tvZanNum.setText(data.get(i).getZan() + "");
 
         return view;
     }
 
-    class CviewHolder{
+    class CviewHolder {
         public CircleImageView cv;
         public TextView tvName;
         public TextView tvDate;

@@ -107,10 +107,15 @@ public class Query {
     /**
      * 查询发表的面试题方法
      */
-    public void queryMessage() {
+    public void queryMessage(int type) {
+        //type 为0 先从缓存下载，Type为1 先从网络下载
         BmobQuery<Message> bmobQuery = new BmobQuery<>();
         bmobQuery.include("author");
-        bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        if (type == 0){
+            bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        }else {
+            bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        }
         //设置缓存保留时间
         bmobQuery.setMaxCacheAge(java.util.concurrent.TimeUnit.DAYS.toMillis(1));
         bmobQuery.findObjects(new FindListener<Message>() {

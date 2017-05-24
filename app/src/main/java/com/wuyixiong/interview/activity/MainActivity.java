@@ -13,12 +13,14 @@ import android.widget.TextView;
 
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.R;
+import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.fragment.HomeFragment;
 import com.wuyixiong.interview.fragment.InterviewFragment;
 import com.wuyixiong.interview.fragment.MessageFragment;
 import com.wuyixiong.interview.fragment.MineFragment;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -131,10 +133,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 selected(3);
                 break;
             case R.id.iv_title_menu:
-                startActivity(new Intent(this, TypeActivity.class));
+                if (BmobUser.getCurrentUser(User.class) != null)
+                    startActivity(new Intent(this, TypeActivity.class));
+                else {
+                    startActivity(new Intent(this,LoginActivity.class));
+                }
                 break;
             case R.id.iv_title_share:
-                startActivity(new Intent(this, ShareActivity.class));
+                if (BmobUser.getCurrentUser(User.class) != null)
+                    startActivity(new Intent(this, ShareActivity.class));
+                else {
+                    startActivity(new Intent(this,LoginActivity.class));
+                }
                 break;
         }
     }

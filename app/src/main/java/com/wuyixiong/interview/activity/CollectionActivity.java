@@ -10,6 +10,7 @@ import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.adapter.CollectionAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.News;
+import com.wuyixiong.interview.event.SendMessageList;
 import com.wuyixiong.interview.event.SendNewsList;
 import com.wuyixiong.interview.event.SendQuestionList;
 import com.wuyixiong.interview.utils.CollectionOperate;
@@ -75,7 +76,7 @@ public class CollectionActivity extends BaseActivity {
         } else if (id == 1) {
             CollectionOperate.getInstance().getAllQuestionCollection(questionCollectionId);
         } else if (id == 2) {
-
+            CollectionOperate.getInstance().queryOnesMessage();
         }
     }
 
@@ -100,6 +101,12 @@ public class CollectionActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishQuestionQuery(SendQuestionList event) {
+        //查询完成
+        adapter.setList(event.getList());
+        adapter.notifyDataSetChanged();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onFinishMessageQuery(SendMessageList event) {
         //查询完成
         adapter.setList(event.getList());
         adapter.notifyDataSetChanged();

@@ -19,6 +19,7 @@ import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.event.SendError;
 import com.wuyixiong.interview.utils.Query;
 import com.wuyixiong.interview.view.MyDecoration;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +35,7 @@ public class MessageFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MessageAdapter adapter;
+    private PullToRefreshView rf;
 
     ArrayList<Message> queryResult;
 
@@ -50,11 +52,13 @@ public class MessageFragment extends Fragment {
         EventBus.getDefault().register(this);
         initView(view);
         initData();
+        setListener();
         recyclerView.setAdapter(adapter);
         return view;
     }
 
     private void initView(View view) {
+        rf = (PullToRefreshView) view.findViewById(R.id.rf_contain);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_message);
         GridLayoutManager manager = new GridLayoutManager(getContext(),1);
         recyclerView.setLayoutManager(manager);
@@ -64,7 +68,16 @@ public class MessageFragment extends Fragment {
     private void initData() {
         adapter = new MessageAdapter(getContext());
         ((BaseActivity) getActivity()).showLoadingDialog("加载中", true);
-        Query.getInstance().queryMessage();
+        Query.getInstance().queryMessage(0);
+    }
+
+    public void setListener(){
+        rf.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Query.getInstance().queryMessage(1);
+            }
+        });
     }
 
 
@@ -75,6 +88,7 @@ public class MessageFragment extends Fragment {
             queryResult = message;
             adapter.setData(queryResult);
             adapter.notifyDataSetChanged();
+            rf.setRefreshing(false);
             ((BaseActivity) getActivity()).cancelDialog();
         }
     }
@@ -82,6 +96,7 @@ public class MessageFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onError(SendError error) {
         if (error.getErrorId() == 1){
+            rf.setRefreshing(false);
             ((BaseActivity) getActivity()).cancelDialog();
             Toast.makeText(getContext(), error.getErrorText(), Toast.LENGTH_SHORT).show();
         }

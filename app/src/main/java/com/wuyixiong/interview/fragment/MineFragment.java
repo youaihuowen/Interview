@@ -139,22 +139,43 @@ public class MineFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
-                        Intent intent = new Intent(getContext(), CollectionActivity.class);
-                        intent.putExtra("id",0);
-                        startActivity(intent);
+                        if (islogin) {
+                            Intent intent = new Intent(getContext(), CollectionActivity.class);
+                            intent.putExtra("id",0);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
                         break;
                     case 1:
-                        Intent intent1 = new Intent(getContext(), CollectionActivity.class);
-                        intent1.putExtra("id",1);
-                        startActivity(intent1);
+                        if (islogin) {
+                            Intent intent1 = new Intent(getContext(), CollectionActivity.class);
+                            intent1.putExtra("id",1);
+                            startActivity(intent1);
+                        } else {
+                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
+
                         break;
                     case 2:
-                        Intent intent2 = new Intent(getContext(), CollectionActivity.class);
-                        intent2.putExtra("id",2);
-                        startActivity(intent2);
+                        if (islogin) {
+                            Intent intent2 = new Intent(getContext(), CollectionActivity.class);
+                            intent2.putExtra("id",2);
+                            startActivity(intent2);
+                        } else {
+                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
                         break;
                     case 4:
+                        if (islogin) {
 
+                        } else {
+                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
                         break;
                     case 5:
 

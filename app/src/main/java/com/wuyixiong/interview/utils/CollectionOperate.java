@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.wuyixiong.interview.db.DBManager;
+import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.entity.NewsCollection;
 import com.wuyixiong.interview.entity.Question;
@@ -12,6 +13,7 @@ import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.event.CollectEvent;
 import com.wuyixiong.interview.event.IsCollection;
 import com.wuyixiong.interview.event.SendError;
+import com.wuyixiong.interview.event.SendMessageList;
 import com.wuyixiong.interview.event.SendNewsList;
 import com.wuyixiong.interview.event.SendQuestionList;
 
@@ -238,6 +240,25 @@ public class CollectionOperate {
             @Override
             public void done(List<Question> list, BmobException e) {
                 DBManager.getInstance(context).addAllQuestion((ArrayList<Question>) list);
+            }
+        });
+    }
+
+    /**
+     * 查询某用户发表的所有信息
+     */
+    public void queryOnesMessage(){
+        BmobQuery<Message> query = new BmobQuery<>();
+        User user = BmobUser.getCurrentUser(User.class);
+        query.addWhereEqualTo("author",new BmobPointer(user));
+        query.include("author");
+        query.order("-updateAt");
+        query.findObjects(new FindListener<Message>() {
+            @Override
+            public void done(List<Message> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new SendMessageList((ArrayList<Message>) list));
+                }
             }
         });
     }

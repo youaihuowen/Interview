@@ -2,8 +2,10 @@ package com.wuyixiong.interview.utils;
 
 import android.util.Log;
 
+import com.wuyixiong.interview.entity.Comment;
 import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.User;
+import com.wuyixiong.interview.event.CommentEvent;
 import com.wuyixiong.interview.event.PublishEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -127,6 +129,33 @@ public class Publication {
                 }else {
                     Log.i("tag", "------------"+e.getMessage());
                     EventBus.getDefault().post(new PublishEvent("上传失败",-1));
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 发表评论
+     * @param msgId
+     * @param content
+     */
+    public void publishComment(String msgId, String content){
+        User user = BmobUser.getCurrentUser(User.class);
+        Message message = new Message();
+        message.setObjectId(msgId);
+
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setZan(0);
+        comment.setAuthor(user);
+        comment.setMessage(message);
+
+        comment.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new CommentEvent(true));
                 }
             }
         });

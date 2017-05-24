@@ -10,7 +10,9 @@ import java.util.ArrayList;
 
 public class CommentEvent {
     private ArrayList<Comment> list;
-    private int type;//0为消息的评论 1为评论的子评论
+    private int type = -1;//0为消息的评论 1为评论的子评论
+
+    private boolean addComment = false;
 
     public CommentEvent() {
     }
@@ -18,6 +20,10 @@ public class CommentEvent {
     public CommentEvent(ArrayList<Comment> list, int type) {
         this.list = list;
         this.type = type;
+    }
+
+    public CommentEvent(boolean addComment) {
+        this.addComment = addComment;
     }
 
     public ArrayList<Comment> getList() {
@@ -34,5 +40,13 @@ public class CommentEvent {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public boolean isAddComment() {
+        return addComment;
+    }
+
+    public void setAddComment(boolean addComment) {
+        this.addComment = addComment;
     }
 }

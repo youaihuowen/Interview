@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.activity.DetailActivity;
 import com.wuyixiong.interview.activity.MainActivity;
@@ -21,6 +20,7 @@ import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.event.SendNews;
 import com.wuyixiong.interview.utils.Query;
 import com.wuyixiong.interview.view.MyDecoration;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,12 +28,14 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
 
     private RecyclerView recycle;
+    private PullToRefreshView rf;
     private NewsAdapter adapter;
     private ArrayList<String> queryWhere = new ArrayList<String>();
     private ArrayList<News> queryResult = new ArrayList<News>();
@@ -50,8 +52,10 @@ public class HomeFragment extends Fragment {
         EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
+        setListener();
         return view;
     }
+
 
     /**
      * 初始化控件
@@ -59,10 +63,9 @@ public class HomeFragment extends Fragment {
      * @param view
      */
     private void initView(View view) {
+        rf = (PullToRefreshView) view.findViewById(R.id.rf_contain);
 
         recycle = (RecyclerView) view.findViewById(R.id.recycle_home);
-//        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-//        manager.setOrientation(LinearLayoutManager.VERTICAL);
         GridLayoutManager manager = new GridLayoutManager(getActivity(),1);
         recycle.setLayoutManager(manager);
         recycle.addItemDecoration(new MyDecoration(getContext(),MyDecoration.VERTICAL_LIST));
@@ -88,6 +91,21 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getActivity(),"网络连接不可用",Toast.LENGTH_LONG).show();
         }
 
+    }
+
+
+    public void setListener(){
+        rf.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                rf.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rf.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行

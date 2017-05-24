@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/ll_item_msgcoll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_margin="@dimen/dp10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_item_msgtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="资讯内容介绍"/>
+            <TextView
+                android:visibility="invisible"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_item_msgtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp5"
+                android:textColor="#ABB4BF"
+                android:textSize="@dimen/dp15"
+                android:text="发布时间"/>
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_item_msgcoll"
+                android:layout_margin="@dimen/dp10"
+                android:layout_width="@dimen/dp80"
+                android:layout_height="@dimen/dp80"
+                android:scaleType="center"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/default_image"/>
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>
