@@ -2,10 +2,12 @@ package com.wuyixiong.interview.fragment;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -80,8 +84,9 @@ public class HomeFragment extends Fragment {
      */
     public void initData() {
         adapter = new NewsAdapter(getActivity());
-        queryWhere.add("Android");
-        queryWhere.add("Html");
+        SharedPreferences shared =getActivity().getSharedPreferences("interest",MODE_PRIVATE);
+
+        queryWhere = addType();
 
         if (MainActivity.havaNetwork){
             Query.getInstance().queryNews(queryWhere);
@@ -101,11 +106,40 @@ public class HomeFragment extends Fragment {
                 rf.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        rf.setRefreshing(false);
+                        queryWhere = addType();
+                        Query.getInstance().queryNews(queryWhere);
+
                     }
                 }, 1000);
             }
         });
+    }
+
+    public ArrayList<String> addType(){
+        ArrayList<String> where = new ArrayList<String>();
+        SharedPreferences shared =getActivity().getSharedPreferences("interest",MODE_PRIVATE);
+        if (shared.getBoolean("Android",true))
+            where.add("Android");
+        Log.i("tag", "------------------------"+shared.getBoolean("Android",true));
+        if (shared.getBoolean("ios",false))
+            where.add("ios");
+        if (shared.getBoolean("Html",true))
+            where.add("Html");
+        if (shared.getBoolean("C++",false))
+            where.add("C++");
+        if (shared.getBoolean("PHP",false))
+            where.add("PHP");
+        if (shared.getBoolean("SQL",false))
+            where.add("SQL");
+        if (shared.getBoolean("Linux",false))
+            where.add("Linux");
+        if (shared.getBoolean("Python",false))
+            where.add("Python");
+        if (where.size() == 0){
+            where.add("Android");
+            where.add("Html");
+        }
+        return where;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
@@ -115,6 +149,7 @@ public class HomeFragment extends Fragment {
             queryResult = newses;
             adapter.setData(queryResult);
             adapter.notifyDataSetChanged();
+            rf.setRefreshing(false);
             ((BaseActivity)getActivity()).cancelDialog();
         }
 

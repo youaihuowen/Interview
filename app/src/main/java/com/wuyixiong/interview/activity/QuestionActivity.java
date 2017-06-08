@@ -41,7 +41,7 @@ public class QuestionActivity extends BaseActivity {
 
     private AnswerAdapter adapter;
     private ArrayList<Question> list = new ArrayList<>();
-    private ArrayList<String> id;//所收藏的试题的id
+    private ArrayList<String> id ;//所收藏的试题的id
     private QuestionList ql;
     private int posotion1 = 0;
     private int size;

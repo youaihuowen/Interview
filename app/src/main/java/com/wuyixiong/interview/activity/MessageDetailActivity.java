@@ -88,6 +88,7 @@ public class MessageDetailActivity extends BaseActivity {
     protected void initView() {
         listView = (ListView) findViewById(R.id.lv_comment);
         adapter = new CommentAdapter(this);
+        adapter.setListView(listView);
         listView.setAdapter(adapter);
 
         ImageLoader.getInstance().displayImage(message.getAuthor().getHeadUrl(), cvIcon);
@@ -132,7 +133,8 @@ public class MessageDetailActivity extends BaseActivity {
     }
 
     private void setData() {
-        Query.getInstance().queryComment(message.getObjectId());
+        showLoadingDialog("加载中",true);
+        Query.getInstance().queryComment(message.getObjectId(),0);
     }
 
     @Override
@@ -189,23 +191,16 @@ public class MessageDetailActivity extends BaseActivity {
             adapter.setData(event.getList());
             adapter.notifyDataSetChanged();
             tvNum.setText(event.getList().size() + "");
-        }
-        if (event.isAddComment()) {
-//            Query.getInstance().queryComment(message.getObjectId());
-            Comment c = new Comment();
-            c.setAuthor(BmobUser.getCurrentUser(User.class));
-            c.setZan(0);
-            c.setContent(editComment.getText().toString().trim());
-            c.setMessage(message);
-
-            adapter.addData(c);
-            adapter.notifyDataSetChanged();
-            editComment.setText("");
-            tvNum.setText((Integer.parseInt(tvNum.getText().toString())+1)+"");
             cancelDialog();
+        }
+        if (event.getIsAdd() == 1){
             toast("添加成功");
-
-
+        }
+        if (!event.isAddComment()) {
+            toast("添加失败");
+        }
+        if (event.getIsAdd() == -1){
+            toast("加载评论失败，请刷新重试");
         }
     }
 }

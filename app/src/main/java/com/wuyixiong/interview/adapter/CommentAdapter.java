@@ -1,16 +1,20 @@
 package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
 import com.wuyixiong.interview.entity.Comment;
+import com.wuyixiong.interview.utils.Publication;
 import com.wuyixiong.interview.view.CircleImageView;
 
 import java.util.ArrayList;
@@ -24,6 +28,8 @@ public class CommentAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Comment> data = new ArrayList<>();
+    private ArrayList<String> flags = new ArrayList<>();
+    private ListView mListView;
 
     public CommentAdapter(Context context) {
         this.context = context;
@@ -35,6 +41,10 @@ public class CommentAdapter extends BaseAdapter {
 
     public void addData(Comment c) {
         data.add(0, c);
+    }
+
+    public void setListView(ListView mListView) {
+        this.mListView = mListView;
     }
 
     @Override
@@ -53,7 +63,7 @@ public class CommentAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, final ViewGroup viewGroup) {
         CviewHolder holder = null;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.item_comment, null);
@@ -64,20 +74,45 @@ public class CommentAdapter extends BaseAdapter {
         }
         ImageLoader.getInstance().displayImage(data.get(i).getAuthor().getHeadUrl(), holder.cv);
         holder.tvName.setText(data.get(i).getAuthor().getNickName());
-        if (data.get(i).getUpdatedAt() == null) {
-            String str = "";
-            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("MM-dd HH:mm");
-            Date date = new Date(System.currentTimeMillis());
-            str = format.format(date);
-            holder.tvDate.setText(str);
-        } else {
-            holder.tvDate.setText(data.get(i).getUpdatedAt().substring(5, 16));
-        }
+        holder.tvDate.setText(data.get(i).getUpdatedAt().substring(5, 16));
         holder.tvMessage.setText(data.get(i).getContent());
         holder.tvZanNum.setText(data.get(i).getZan() + "");
-
+        if (flags != null && flags.size() > 0) {
+            for (String flag : flags) {
+                if (flag.equals(data.get(i).getObjectId())) {
+                    holder.ivZan.setSelected(true);
+                } else {
+                    holder.ivZan.setSelected(false);
+                }
+            }
+        }
+        holder.ivZan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                if (!view1.isSelected()) {
+                    updateItem(mListView, i);
+                    flags.add(data.get(i).getObjectId());
+                }
+            }
+        });
         return view;
     }
+
+
+    public void updateItem(ListView mListView, int index) {
+        int visiblePosition = mListView.getFirstVisiblePosition();
+        if (index - visiblePosition >= 0) {
+            View view = mListView.getChildAt(index - visiblePosition);
+            CviewHolder holder = (CviewHolder) view.getTag();
+
+            holder.ivZan.setSelected(true);
+            data.get(index).setZan(data.get(index).getZan() + 1);
+            holder.tvZanNum.setText(data.get(index).getZan() + "");
+            Publication.getInstance().zan(data.get(index).getObjectId(), data.get(index).getZan());
+
+        }
+    }
+
 
     class CviewHolder {
         public CircleImageView cv;
@@ -100,4 +135,5 @@ public class CommentAdapter extends BaseAdapter {
             ivZi = (ImageView) view.findViewById(R.id.iv_comment_zicomment);
         }
     }
+
 }

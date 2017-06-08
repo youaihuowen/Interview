@@ -203,10 +203,14 @@ public class MineFragment extends Fragment {
             tvUsername.setVisibility(View.VISIBLE);
             tvnickname.setText(nickname);
             tvnickname.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage((String) BmobUser.getObjectByKey("headUrl"), cv);
+            if (((String) BmobUser.getObjectByKey("headUrl")) == null){
+                cv.setImageResource(R.drawable.ic_unlogin);
+            }else {
+                ImageLoader.getInstance().displayImage((String) BmobUser.getObjectByKey("headUrl"), cv);
+            }
         } else {
             islogin = false;
-
+            cv.setImageResource(R.drawable.ic_unlogin);
             tvUlogin.setVisibility(View.VISIBLE);
             tvUsername.setText("username");
             tvUsername.setVisibility(View.GONE);

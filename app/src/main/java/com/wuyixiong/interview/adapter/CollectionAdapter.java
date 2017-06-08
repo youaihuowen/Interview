@@ -1,6 +1,7 @@
 package com.wuyixiong.interview.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,11 @@ import android.view.ViewGroup;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wuyixiong.interview.R;
+import com.wuyixiong.interview.activity.QuestionActivity;
 import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.entity.Question;
+import com.wuyixiong.interview.entity.QuestionList;
 import com.wuyixiong.interview.event.SendNews;
 import com.wuyixiong.interview.viewholder.MsgCollectionViewHolder;
 import com.wuyixiong.interview.viewholder.NewsViewHolder;
@@ -77,6 +80,15 @@ public class CollectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (holder instanceof QuestionViewHolder) {
             QuestionViewHolder viewHolder = (QuestionViewHolder) holder;
             viewHolder.tv.setText(((Question) list.get(position)).getTitle());
+            viewHolder.tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext,QuestionActivity.class);
+                    intent.putExtra("questionList",new QuestionList((ArrayList<Question>) list,position));
+                    mContext.startActivity(intent);
+                }
+            });
+
         } else if (holder instanceof MsgCollectionViewHolder){
             MsgCollectionViewHolder viewHolder = (MsgCollectionViewHolder) holder;
             viewHolder.tvName.setText(((Message)list.get(position)).getContents());

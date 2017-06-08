@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -256,6 +257,10 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
                 SharedPreferences shared = getSharedPreferences("collectionId", MODE_PRIVATE);
                 SharedPreferences.Editor editor = shared.edit();
                 editor.clear().commit();
+                SharedPreferences shared1 = getSharedPreferences("interest", MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = shared1.edit();
+                editor1.clear().commit();
+
                 finish();
                 break;
         }
@@ -414,5 +419,11 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            EventBus.getDefault().post(new LoginedEvent(true));
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

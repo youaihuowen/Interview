@@ -17,6 +17,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
 /**
@@ -140,7 +141,7 @@ public class Publication {
      * @param msgId
      * @param content
      */
-    public void publishComment(String msgId, String content){
+    public void publishComment(final String msgId, String content){
         User user = BmobUser.getCurrentUser(User.class);
         Message message = new Message();
         message.setObjectId(msgId);
@@ -155,8 +156,25 @@ public class Publication {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null){
-                    EventBus.getDefault().post(new CommentEvent(true));
+                    Query.getInstance().queryComment(msgId,1);
+                }else {
+                    EventBus.getDefault().post(new CommentEvent(false));
                 }
+            }
+        });
+    }
+
+    /**
+     * 点赞时修改后台数据
+     * @param num 修改之后的个数
+     */
+    public void zan(String id,int num){
+        Comment comment = new Comment();
+        comment.setZan(num);
+        comment.update(id, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+
             }
         });
     }

@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.wuyixiong.interview.entity.Interest;
 import com.wuyixiong.interview.entity.NewsCollection;
 import com.wuyixiong.interview.entity.QuestionCollection;
+import com.wuyixiong.interview.entity.User;
 
 import java.util.List;
 
@@ -93,6 +95,42 @@ public class LoginedSetId {
                 }
             }
         });
+
+        Interest interest = new Interest();
+        interest.setUserId(userid);
+        interest.setC(false);
+        interest.setAndroid(true);
+        interest.setHtml(true);
+        interest.setIos(false);
+        interest.setLinux(false);
+        interest.setPHP(false);
+        interest.setPython(false);
+        interest.setSQL(false);
+        interest.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null){
+                    Log.i("tag", "-----------"+"注册时创建关注信息成功");
+
+                    BmobQuery<Interest> query2 = new BmobQuery<Interest>();
+                    query2.addWhereEqualTo("userId",userid);
+                    query2.findObjects(new FindListener<Interest>() {
+                        @Override
+                        public void done(List<Interest> list, BmobException e) {
+                            if (e == null && list.size()>0){
+                                setInterest(list.get(0));
+                            }else {
+                                Log.i("tag", "-----------"+"注册时将关注写入sharedpreference失败");
+                            };
+                        }
+                    });
+                }else {
+                    Log.i("tag", "-----------"+"注册时创建关注信息失败");
+                }
+            }
+        });
+
+
     }
 
     /**
@@ -138,5 +176,39 @@ public class LoginedSetId {
                 }
             }
         });
+
+        BmobQuery<Interest> query2 = new BmobQuery<Interest>();
+        query2.addWhereEqualTo("userId",userid);
+        query2.findObjects(new FindListener<Interest>() {
+            @Override
+            public void done(List<Interest> list, BmobException e) {
+                if (e == null && list.size()>0){
+                    setInterest(list.get(0));
+                    Log.i("tag", "-----------"+"登录时将关注写入sharedpreference成功");
+
+                }else {
+                    Log.i("tag", "-----------"+"登录时将关注写入sharedpreference失败");
+                };
+            }
+        });
+
+    }
+
+    /**
+     * 将关注的类型存入sharedpreference中
+     * @param interest
+     */
+    public void setInterest(Interest interest){
+        SharedPreferences shared =mContext.getSharedPreferences("interest",MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putBoolean("Android",interest.isAndroid());
+        editor.putBoolean("ios",interest.isIos());
+        editor.putBoolean("Html",interest.isHtml());
+        editor.putBoolean("C++",interest.isC());
+        editor.putBoolean("PHP",interest.isPHP());
+        editor.putBoolean("SQL",interest.isSQL());
+        editor.putBoolean("Linux",interest.isLinux());
+        editor.putBoolean("Python",interest.isPython());
+        editor.commit();
     }
 }

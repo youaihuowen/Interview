@@ -48,6 +48,9 @@ public class Query {
     }
 
 
+
+
+
     /**
      * 查询资讯(有网)
      *
@@ -57,6 +60,7 @@ public class Query {
         BmobQuery<News> bmobQuery = new BmobQuery<News>();
         bmobQuery.addWhereContainedIn("category", list);
         bmobQuery.setLimit(15);//设置每次显示条数
+        bmobQuery.order("-updatedAt");
         Boolean isCache = bmobQuery.hasCachedResult(News.class);
         if (isCache) {
             bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
@@ -111,6 +115,7 @@ public class Query {
         //type 为0 先从缓存下载，Type为1 先从网络下载
         BmobQuery<Message> bmobQuery = new BmobQuery<>();
         bmobQuery.include("author");
+        bmobQuery.order("-updatedAt");
         if (type == 0){
             bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         }else {
@@ -139,7 +144,7 @@ public class Query {
     public void queryRecommend(String recommendType){
         BmobQuery<Recommend>  query = new BmobQuery<>("recommend");
         query.addWhereEqualTo("recommendType",recommendType);
-        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         //设置缓存保留时间
         query.setMaxCacheAge(java.util.concurrent.TimeUnit.DAYS.toMillis(1));
         query.findObjects(new FindListener<Recommend>() {
@@ -157,19 +162,20 @@ public class Query {
     /**
      * 查询消息的评论
      * @param messageId
+     * @param type 0为第一次进入时查询，1为添加评论后查询
      */
-    public void queryComment(String messageId){
+    public void queryComment(String messageId, final int type){
         BmobQuery<Comment> query = new BmobQuery<>();
         Message message = new Message();
         message.setObjectId(messageId);
         query.addWhereEqualTo("message",new BmobPointer(message));
-        query.order("updateAt");
+        query.order("-updatedAt");
         query.include("author");
         query.findObjects(new FindListener<Comment>() {
             @Override
             public void done(List<Comment> list, BmobException e) {
                 if (e == null){
-                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,0));
+                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,0,type));
                     if (list.get(0).getAuthor() == null){
                         Log.i("tag", "-----------------"+"user 为 NULL");
                     }else {
@@ -177,6 +183,8 @@ public class Query {
                         Log.i("tag", "-----------------"+list.get(1).getAuthor().toString());
                         Log.i("tag", "-----------------"+list.get(2).getAuthor().toString());
                     }
+                }else {
+                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,-1,-1));
                 }
             }
         });

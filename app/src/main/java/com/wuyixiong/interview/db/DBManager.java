@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.wuyixiong.interview.entity.Question;
 
@@ -50,6 +51,7 @@ public class DBManager {
     public void addAllQuestion(ArrayList<Question> list){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String sql = "insert into MyQuestion (objectId,type,title,content,url,company)values(?,?,?,?,?,?)";
+        Log.i("tag", "------------------------信息条数"+list.size());
         for (Question question:list) {
             db.execSQL(sql,new Object[]{question.getObjectId(),question.getType(),question.getTitle(),
                     question.getContent(),question.getUrl(),question.getCompany()});
@@ -67,17 +69,20 @@ public class DBManager {
     public void removeAllQuestion(){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String sql = "delete from MyQuestion";
+        db.execSQL(sql);
         db.close();
     }
     //查询所有收藏试题的id
     public ArrayList<String> queryQuestionId(String type){
         ArrayList<String> list = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String sql = "select objectId from MyQuestion where type = ?";
-        Cursor c = db.rawQuery(sql,new String[]{type});
+//        String sql = "select objectId from MyQuestion where type = ?";
+//        Cursor c = db.rawQuery(sql,new String[]{type});
+        String sql = "select objectId from MyQuestion";
+        Cursor c = db.rawQuery(sql,null);
         if (c.getCount()<=0){
             db.close();
-            return null;
+
         }else {
             c.moveToFirst();
             int index = c.getColumnIndexOrThrow("objectId");

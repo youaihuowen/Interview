@@ -71,6 +71,7 @@ public class CollectionActivity extends BaseActivity {
         shared = getSharedPreferences("collectionId", MODE_PRIVATE);
         newsCollectionId = shared.getString("newsCollectionId", "null");
         questionCollectionId = shared.getString("questionCollectionId", null);
+        showLoadingDialog("加载中",true);
         if (id == 0) {
             CollectionOperate.getInstance().getAllNewsCollection(newsCollectionId);
         } else if (id == 1) {
@@ -97,6 +98,7 @@ public class CollectionActivity extends BaseActivity {
         //查询完成
         adapter.setList(event.getList());
         adapter.notifyDataSetChanged();
+        cancelDialog();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
@@ -104,11 +106,14 @@ public class CollectionActivity extends BaseActivity {
         //查询完成
         adapter.setList(event.getList());
         adapter.notifyDataSetChanged();
+        cancelDialog();
+
     }
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishMessageQuery(SendMessageList event) {
         //查询完成
         adapter.setList(event.getList());
         adapter.notifyDataSetChanged();
+        cancelDialog();
     }
 }

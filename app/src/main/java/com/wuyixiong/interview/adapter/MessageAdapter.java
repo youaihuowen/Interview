@@ -66,8 +66,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder0.company.setText(data.get(position).getCompany());
             viewHolder0.date.setText(data.get(position).getUpdatedAt());
             viewHolder0.message.setText(data.get(position).getContents());
-            ImageLoader.getInstance().displayImage(data.get(position).getAuthor().getHeadUrl(),
-                    viewHolder0.icon);
+            if (data.get(position).getAuthor().getHeadUrl() == null){
+                viewHolder0.icon.setImageResource(R.drawable.ic_unlogin);
+            }else {
+                ImageLoader.getInstance().displayImage(data.get(position).getAuthor().getHeadUrl(),
+                        viewHolder0.icon);
+            }
             viewHolder0.contents.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -85,8 +89,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder1.company.setText(data.get(position).getCompany());
             viewHolder1.date.setText(data.get(position).getUpdatedAt());
             viewHolder1.message.setText(data.get(position).getContents());
-            ImageLoader.getInstance().displayImage(data.get(position).getAuthor().getHeadUrl(),
-                    viewHolder1.icon);
+            if (data.get(position).getAuthor().getHeadUrl() == null){
+                viewHolder1.icon.setImageResource(R.drawable.ic_unlogin);
+            }else {
+                ImageLoader.getInstance().displayImage(data.get(position).getAuthor().getHeadUrl(),
+                        viewHolder1.icon);
+            }
             //type1特有的
             ImageLoader.getInstance().displayImage(data.get(position).getPic1(),viewHolder1.pic1);
             viewHolder1.contents.setOnClickListener(new View.OnClickListener() {
@@ -106,8 +114,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder3.company.setText(data.get(position).getCompany());
             viewHolder3.date.setText(data.get(position).getUpdatedAt());
             viewHolder3.message.setText(data.get(position).getContents());
-            ImageLoader.getInstance().displayImage(data.get(position).getAuthor().getHeadUrl(),
-                    viewHolder3.icon);
+            if (data.get(position).getAuthor().getHeadUrl() == null){
+                viewHolder3.icon.setImageResource(R.drawable.ic_unlogin);
+            }else {
+                ImageLoader.getInstance().displayImage(data.get(position).getAuthor().getHeadUrl(),
+                        viewHolder3.icon);
+            }
             //type3特有的
             ImageLoader.getInstance().displayImage(data.get(position).getPic1(),viewHolder3.pic1);
             ImageLoader.getInstance().displayImage(data.get(position).getPic2(),viewHolder3.pic2);
