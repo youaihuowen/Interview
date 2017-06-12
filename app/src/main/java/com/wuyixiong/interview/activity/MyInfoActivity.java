@@ -308,17 +308,21 @@ public class MyInfoActivity extends BaseActivity implements View.OnClickListener
         if (data != null) {
             if (requestCode == 400) {//相机的返回码
                 Bitmap b = null;
-                Object ob = data.getExtras().get("data");
-                if (ob != null && ob instanceof Bitmap) {
-                    b = (Bitmap) ob;
+
+                if (data.getExtras() != null){
+                    Object ob = data.getExtras().get("data");
+                    if (ob != null && ob instanceof Bitmap) {
+                        b = (Bitmap) ob;
+                    }
+                    if (data.getData() != null) {//得到uri 如果手机自动存储则为true
+                        cutPhoto(data.getData());
+                    } else {//如果手机不自动存储则为false
+                        File f = writeFile(b);
+                        Uri uri = Uri.fromFile(f);
+                        cutPhoto(uri);
+                    }
                 }
-                if (data.getData() != null) {//得到uri 如果手机自动存储则为true
-                    cutPhoto(data.getData());
-                } else {//如果手机不自动存储则为false
-                    File f = writeFile(b);
-                    Uri uri = Uri.fromFile(f);
-                    cutPhoto(uri);
-                }
+
 
             }
             if (requestCode == 500) {//调用相册的返回码

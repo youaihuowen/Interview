@@ -27,6 +27,8 @@ dependencies {
     //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
     //bmob-sms ：Bmob单独为短信服务提供的包
+
+
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
     compile 'com.jakewharton:butterknife:7.0.0'
     compile 'com.android.support:support-v4:24.2.1'
@@ -41,6 +43,6 @@ dependencies {
     compile 'com.kyleduo.switchbutton:library:1.4.6'
     compile 'com.foamtrace:photopicker:1.0'
     compile 'com.yalantis:phoenix:1.2.3'
-
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
     testCompile 'junit:junit:4.12'
 }

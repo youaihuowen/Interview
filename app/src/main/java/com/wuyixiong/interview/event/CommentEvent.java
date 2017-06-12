@@ -10,9 +10,8 @@ import java.util.ArrayList;
 
 public class CommentEvent {
     private ArrayList<Comment> list;
-    private int type = -1;//0为消息的评论 1为评论的子评论
-    private int isAdd = 0;//0为第一次进入时查询，1为添加评论时查询，-1为查询失败
-    private boolean addComment = true;
+    private int type ;//1为查询成功 -1为查询失败
+    private int addComment;//1为添加成功，-1为添加失败
 
     public CommentEvent() {
     }
@@ -22,13 +21,9 @@ public class CommentEvent {
         this.type = type;
     }
 
-    public CommentEvent(ArrayList<Comment> list, int type, int isAdd) {
+    public CommentEvent(ArrayList<Comment> list, int type, int addComment) {
         this.list = list;
         this.type = type;
-        this.isAdd = isAdd;
-    }
-
-    public CommentEvent(boolean addComment) {
         this.addComment = addComment;
     }
 
@@ -48,19 +43,11 @@ public class CommentEvent {
         this.type = type;
     }
 
-    public boolean isAddComment() {
+    public int getAddComment() {
         return addComment;
     }
 
-    public void setAddComment(boolean addComment) {
+    public void setAddComment(int addComment) {
         this.addComment = addComment;
-    }
-
-    public int getIsAdd() {
-        return isAdd;
-    }
-
-    public void setIsAdd(int isAdd) {
-        this.isAdd = isAdd;
     }
 }

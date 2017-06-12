@@ -156,9 +156,9 @@ public class Publication {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null){
-                    Query.getInstance().queryComment(msgId,1);
+                    Query.getInstance().queryComment(msgId);
                 }else {
-                    EventBus.getDefault().post(new CommentEvent(false));
+                    EventBus.getDefault().post(new CommentEvent(null,1,-1));
                 }
             }
         });

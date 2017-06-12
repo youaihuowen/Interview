@@ -11,7 +11,11 @@ import com.wuyixiong.interview.entity.Comment;
 import com.wuyixiong.interview.entity.Message;
 import com.wuyixiong.interview.entity.News;
 import com.wuyixiong.interview.entity.Recommend;
+import com.wuyixiong.interview.entity.Test;
+import com.wuyixiong.interview.entity.Type;
 import com.wuyixiong.interview.event.CommentEvent;
+import com.wuyixiong.interview.event.QueryTestEvent;
+import com.wuyixiong.interview.event.QueryTypeEvent;
 import com.wuyixiong.interview.event.RecommendEvent;
 import com.wuyixiong.interview.event.SendError;
 import com.wuyixiong.interview.event.SendNews;
@@ -36,6 +40,8 @@ import cn.bmob.v3.listener.FindListener;
 public class Query {
     private static Query query = null;
 
+    public static int SUCCESS = 1;
+    public static int FAILED = -1;
     private Query() {
 
     }
@@ -160,11 +166,10 @@ public class Query {
     }
 
     /**
-     * 查询消息的评论
-     * @param messageId
-     * @param type 0为第一次进入时查询，1为添加评论后查询
+     * 查询评论
+     * @param messageId  快照的Id
      */
-    public void queryComment(String messageId, final int type){
+    public void queryComment(String messageId){
         BmobQuery<Comment> query = new BmobQuery<>();
         Message message = new Message();
         message.setObjectId(messageId);
@@ -175,16 +180,9 @@ public class Query {
             @Override
             public void done(List<Comment> list, BmobException e) {
                 if (e == null){
-                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,0,type));
-                    if (list.get(0).getAuthor() == null){
-                        Log.i("tag", "-----------------"+"user 为 NULL");
-                    }else {
-                        Log.i("tag", "-----------------"+list.get(0).getAuthor().toString());
-                        Log.i("tag", "-----------------"+list.get(1).getAuthor().toString());
-                        Log.i("tag", "-----------------"+list.get(2).getAuthor().toString());
-                    }
+                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,SUCCESS));
                 }else {
-                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,-1,-1));
+                    EventBus.getDefault().post(new CommentEvent((ArrayList<Comment>) list,FAILED));
                 }
             }
         });
@@ -210,6 +208,42 @@ public class Query {
             }
         });
 
+    }
+
+    /**
+     * 查询类型
+     */
+    public void queryType(){
+        BmobQuery<Type> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Type>() {
+            @Override
+            public void done(List<Type> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new QueryTypeEvent((ArrayList<Type>) list,true));
+                }else {
+                    EventBus.getDefault().post(new QueryTypeEvent((ArrayList<Type>) list,false));
+                }
+            }
+        });
+    }
+
+    /**
+     * 查询单选题
+     * @param type 类型
+     */
+    public void queryTest(String type){
+        BmobQuery<Test> query = new BmobQuery<>();
+        query.addWhereEqualTo("type",type);
+        query.findObjects(new FindListener<Test>() {
+            @Override
+            public void done(List<Test> list, BmobException e) {
+                if (e == null){
+                    EventBus.getDefault().post(new QueryTestEvent((ArrayList<Test>) list,true));
+                }else {
+                    EventBus.getDefault().post(new QueryTestEvent((ArrayList<Test>) list,false));
+                }
+            }
+        });
     }
 
 

@@ -94,13 +94,10 @@ public class ShareActivity extends BaseActivity {
                 // 选择照片
                 case REQUEST_CAMERA_CODE:
                     loadAdpater(data.getStringArrayListExtra(PhotoPickerActivity.EXTRA_RESULT));
-                    toast("选择照片");
                     break;
                 // 预览
                 case REQUEST_PREVIEW_CODE:
                     loadAdpater(data.getStringArrayListExtra(PhotoPreviewActivity.EXTRA_RESULT));
-                    toast("预览");
-
                     break;
                 // 调用相机拍照
                 case ImageCaptureManager.REQUEST_TAKE_PHOTO:
@@ -136,6 +133,9 @@ public class ShareActivity extends BaseActivity {
                 company = editCompany.getText().toString().trim();
                 if (company.length()<2){
                     company = "未知";
+                }
+                if (imagePaths == null){
+                   imagePaths = new ArrayList<>();
                 }
                 Publication.getInstance().publishpic(imagePaths);
                 break;

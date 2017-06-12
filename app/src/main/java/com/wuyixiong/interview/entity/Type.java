@@ -8,6 +8,7 @@ import cn.bmob.v3.BmobObject;
 
 public class Type extends BmobObject {
     String typeName;
+    String pic;
 
     public String getTypeName() {
         return typeName;
@@ -15,5 +16,13 @@ public class Type extends BmobObject {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }

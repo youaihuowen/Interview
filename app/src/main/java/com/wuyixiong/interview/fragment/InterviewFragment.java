@@ -19,14 +19,18 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.wuyixiong.interview.R;
+import com.wuyixiong.interview.activity.LoginActivity;
 import com.wuyixiong.interview.activity.MainActivity;
 import com.wuyixiong.interview.activity.QuestionActivity;
 import com.wuyixiong.interview.activity.RecommendActivity;
+import com.wuyixiong.interview.activity.TestTypeActivity;
+import com.wuyixiong.interview.activity.TypeActivity;
 import com.wuyixiong.interview.adapter.QuestionAdapter;
 import com.wuyixiong.interview.adapter.QuestionTypeAdapter;
 import com.wuyixiong.interview.base.BaseActivity;
 import com.wuyixiong.interview.entity.Question;
 import com.wuyixiong.interview.entity.QuestionList;
+import com.wuyixiong.interview.entity.User;
 import com.wuyixiong.interview.view.HorizontalListView;
 import com.wuyixiong.interview.view.MyListView;
 import com.wuyixiong.interview.view.MyScrollView;
@@ -39,6 +43,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
@@ -65,6 +70,7 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
     FrameLayout suspension2;
     @Bind(R.id.part_head)
     LinearLayout partHead;
+
 
     private HorizontalListView horlist1;
     private HorizontalListView horlist2;
@@ -109,6 +115,7 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
 
 
     public void initView(View v) {
+
         sv = (MyScrollView) v.findViewById(R.id.sv_interview);
         listView = (MyListView) v.findViewById(R.id.lv_question);
         horlist1 = (HorizontalListView) v.findViewById(R.id.horlist1);
@@ -182,6 +189,11 @@ public class InterviewFragment extends Fragment implements AdapterView.OnItemCli
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_head_interview:
+                if (BmobUser.getCurrentUser(User.class) != null){
+                    startActivity(new Intent(getActivity(), TestTypeActivity.class));
+                }else {
+                    startActivity(new Intent(getActivity(),LoginActivity.class));
+                }
                 break;
             case R.id.ll_explorer_hot:
                 Intent intent0 = new Intent(getActivity(), RecommendActivity.class);

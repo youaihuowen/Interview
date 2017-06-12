@@ -133,8 +133,8 @@ public class MessageDetailActivity extends BaseActivity {
     }
 
     private void setData() {
-        showLoadingDialog("加载中",true);
-        Query.getInstance().queryComment(message.getObjectId(),0);
+        showLoadingDialog("加载中", true);
+        Query.getInstance().queryComment(message.getObjectId());
     }
 
     @Override
@@ -157,17 +157,17 @@ public class MessageDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_send:
                 String text = editComment.getText().toString().trim();
-                if (text.length() > 0){
-                    showLoadingDialog("发送中",true);
+                if (text.length() > 0) {
+                    showLoadingDialog("发送中", true);
                     Publication.getInstance().publishComment(message.getObjectId(), text);
-                }
-                else
+                } else
                     toast("评论不能为空");
                 //关闭软键盘
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
-                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 }
+                editComment.setText("");
                 break;
         }
     }
@@ -186,21 +186,18 @@ public class MessageDetailActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onFinishQuery(CommentEvent event) {
-        //查询完成  是否添加评论
-        if (event.getType() == 0) {
+        if (event.getType() == 1 && event.getList() != null) {
             adapter.setData(event.getList());
             adapter.notifyDataSetChanged();
             tvNum.setText(event.getList().size() + "");
             cancelDialog();
+        }else if (event.getType() == -1){
+            toast("评论加载失败，请稍后重试");
+            cancelDialog();
         }
-        if (event.getIsAdd() == 1){
-            toast("添加成功");
+        if (event.getAddComment() == -1){
+            toast("添加评论失败");
         }
-        if (!event.isAddComment()) {
-            toast("添加失败");
-        }
-        if (event.getIsAdd() == -1){
-            toast("加载评论失败，请刷新重试");
-        }
+
     }
 }
